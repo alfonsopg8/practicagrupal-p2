@@ -23,7 +23,7 @@ class UsuarioBase:
     def crear_usuario(self):
         try:
             base_usuario = pd.read_csv('usuario_base.csv')
-            num_usuarios = len(base_usuario) +2
+            num_usuarios = len(base_usuario) +1
         except FileNotFoundError:
             num_usuarios = 1
 
@@ -150,5 +150,6 @@ class UsuarioBase:
         cls.lista_usuarios.append(Usuario(id, nombre, apellido, correo))'''
 
 base= UsuarioBase()
-base.editar_usuario()
+base.crear_usuario()
+base.crear_usuario()
 
