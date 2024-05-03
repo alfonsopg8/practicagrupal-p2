@@ -14,7 +14,7 @@ class IdError(Exception):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
     def __str__(self):
-        return 'El ID tiene 3 cifras numéricas.'
+        return 'El ID no existe.'
 
 class CorreoError(Exception):
     def __init__(self,*args,**kwargs):
