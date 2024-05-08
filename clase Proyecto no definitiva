@@ -1,0 +1,125 @@
+class Proyecto:
+    '''
+    Descripcion Clase:
+    Esta clase se encargara de permitir que la clase GestorSistema pueda llamarla para crear proyectos.
+    Además, será la encargada de añadir tareas al proyecto, además de visualizarlas
+
+    Parametros Clase:
+    id_proyecto: Identificador del proyecto, lo hace diferente del resto
+    id_usuario: Identificador del usuario al que se le ha asignado el proyecto
+    nombre: Nombre del proyecto
+    descripcion: Descripcion del proyecto, de que trata
+
+    Métodos Clase:
+    __init__: Inicializa los parametros comentados anteriormente permitiendo la creacion de un proyecto al llamarla en
+    la clase GestorSistema.
+    agregar_tarea: Encargado de agregar tareas al proyecto desado almacenandolas en un archivo json
+    mostrar_tarea: Encargado de mostrar las tarea que tiene un proyecto
+    '''
+    # Constructor de la clase, inicializa los parametros
+    def __init__(self, id_proyecto, id_usuario, nombre, descripcion):
+        self.id_proyecto = id_proyecto
+        self.id_usuario = id_usuario
+        self.nombre = nombre
+        self.descripcion = descripcion
+        # Creamos una lista vacia llamada tareas donde almacenaremos las tareas del proyecto
+        self.tareas = []
+
+    # Metodo encargado de añadir tareas al proyecto
+    def agregar_tarea(self):
+        # Probamos a abrir el archivo json que almacena los proyectos
+        try:
+            # Abrimos el archivo
+            with open('proyectos.json', 'r') as json_file:
+                # Si este se abre, guardamos el diccionario perteneciente al json en el atributo proyectos
+                proyectos = json.load(json_file)
+        # Si no existe el archivo, salta el error
+        except FileNotFoundError:
+            # Creamos un diccionario vacío
+            proyectos = {}
+
+        # Inicializamos id a 1, por si no existen tareas creadas en el proyecto
+        id = 1
+        # Mientras el proyecto exista en el diccionario
+        if self.id_proyecto in proyectos:
+            # Guardamos el respectivo proyecto en la variable proyecto_actual
+            proyecto_actual = proyectos[self.id_proyecto]
+            # Si la fila 'tareas_proyecto' se encuentra en el proyecto
+            if "tareas_proyecto" in proyecto_actual:
+                # id es el número de la tarea máxima encontrada en el diccionario + 1
+                id = max((int(key) for key in proyecto_actual['tareas_proyecto'].keys()), default=0) + 1
+
+        # Vamos a pedir los atributos de la tarea y a comprobarlos
+        # Bucle que comprueba que el titulo es valido, sino lo vuelve a pedir
+        while True:
+            # Probamos a escribir el título
+            try:
+                titulo = input("Titulo: ")
+                # Si el titulo está vacío
+                if not titulo:
+                    # Lanzamos el error TituloError
+                    raise TituloError("El titulo no puede estar vacío")
+            # Si el error salta
+            except TituloError as te:
+                # Imprimimos error
+                print(te)
+                # Continuamos con el bucle
+                continue
+            # Si el titulo es valido
+            else:
+                # Salimos del bucle
+                break
+        # # Bucle que comprueba que la descripcion es valida, sino la vuelve a pedir
+        while True:
+            # Probamos a introducir descripcion
+            try:
+                descripcion = input("Descripcion: ")
+                # Si la descripcion contiene mas de 80 carácteres
+                if len(descripcion) > 80:
+                    # Se lanza de error DescripcionError
+                    raise DescripcionError("La descripción no puede exceder los 80 caracteres")
+            # Si el error salta
+            except DescripcionError as de:
+                # Imprimimos el error
+                print(de)
+                # Continuamos con el bucle
+                continue
+            # Si la descripcion es correcta
+            else:
+                # Salimos del bucle
+                break
+
+        # Esta de la tarea
+        estado = 'pendiente'
+
+        # Almacenamos la nueva tarea en el atributo nueva_tarea llamando a la funcion Tarea
+        nueva_tarea = Tarea(id, titulo, descripcion, estado)
+
+        # Si el proyecto existe en el diccionario
+        if self.id_proyecto in proyectos:
+            # Y si existe pero no existen tareas
+            if 'tareas_proyecto' not in proyectos[self.id_proyecto]:
+                # Creamos el diccionario tareas dentro de su proyecto, donde key=id de la tarea
+                proyectos[self.id_proyecto]['tareas_proyecto'] = {}
+            # Añadimos la nueva tarea al repertorio de tareas del proyecto
+            proyectos[self.id_proyecto]['tareas_proyecto'][id] = nueva_tarea.__dict__
+        # Si no existe el proyecto
+        else:
+            # Imprimimos que no existe
+            print("Proyecto no encontrado")
+
+        # Abrimos el archivo json en modo escritura
+        with open('proyectos.json', 'w') as json_file:
+            # Guardamos en él, el diccionario proyectos actualizado
+            json.dump(proyectos, json_file, indent=4)
+
+    # Método que nis permite visualizar la tarea desada del proyecto
+    def mostrar_tarea(self):
+        # Abrimos el archivo json en modo escritura
+        with open('proyectos.json', 'r') as json_file:
+            # Guardamos el diccionario del json en el atributo proyectos
+            proyectos = json.load(json_file)
+            # Si el id del proyeto existe
+            if self.id_proyecto in proyectos:
+                # Imprimimos las tareas del proyecto
+                print(f'Tareas del proyecto: {proyectos[self.id_proyecto]["tareas_proyecto"]}')
