@@ -1,0 +1,155 @@
+# Importamos las librerias necesarias
+import pandas as pd
+from errores import IdError,DescripcionError
+from clase_proyecto import Proyecto
+import json
+
+# Clase que nos permite gestionar los proyectos del sistema
+class Gestor_Sitema:
+    '''
+    Descripcion Clase:
+    Esta clase se encarga de crear proyectos añadiendolos a un usuario, además de eliminar los deseados y visualizarlos
+
+    Parámetros Clase:
+    proyectos: Almacena los proyectos creados
+
+    Métodos clase:
+    guardar_proyectos_json: Será llamada en las otras clases cuando se quieran guardar proyectos en un archivo json
+    cargar_proyectos_json: Será llamada cuando se quiera abrir el archivo json de los proyectos en modo lectura
+    add_proyecto: Encargado de añadir proyectos y asignarselos a un usuario
+    eliminar_proyecto: Encargado de eliminar los proyectos que se requieran
+    ver_proyecto: Encargado de ver los proyecto deseados en el archivo
+    '''
+    # Metodo constructor que inicializa el diccionario self.proyectos
+    def __init__(self):
+        self.proyectos = {}
+
+    # Encargada de escribir en el archivo que almacena los proyectos
+    def guardar_proyectos_json(self, filename):
+        # Abrimos el archivo json en modo escritura
+        with open(filename, 'w') as json_file:
+            # Añadimos a este el proyecto creado
+            json.dump(self.proyectos, json_file, indent=4)
+
+    # Encargada de abrir el archivo json de los proyectos en modo lectura
+    def cargar_proyectos_json(self, filename):
+        # Probamos a abrir el archivo
+        try:
+            # Abrimos el archivo en modo lectura
+            with open(filename, 'r') as json_file:
+                # Si existe el archivo lo guardamos el diccionario del archivo en el parámetro self.proyectos
+                self.proyectos = json.load(json_file)
+        # Si no existe el archivo salta el error FileNotFoundError
+        except FileNotFoundError:
+            pass
+
+    # Método que crea proyectos y los almacena
+    def add_proyecto(self):
+        # Llamamos al metodo que abre el archivo y carga los proyectos dentro de self.proyectos
+        self.cargar_proyectos_json('proyectos.json')
+
+        # Cargamos base de datos usuario en el atributo base_usuario en formato pandas
+        base_usuario = pd.read_csv('usuario_base.csv')
+
+        # Buscamos el numero de proyectos creados
+        # Si existen proyectos, alamcena la cantidad maxima en id_max_proyecto
+        id_max_proyecto = max(self.proyectos.keys()) if self.proyectos else 0
+
+        # Guardamos el numero de proyectos creados + 1 en id_proyecto, el cual sera el id del proyecto
+        id_proyecto = int(id_max_proyecto) + 1
+
+        # Bucle que pide el id del usuario al que encargarle el proyecto, si no existe vuelve a pedir el usuario
+        while True:
+                # Pide id del usuario
+                id_usuario = int(input("Ingrese el ID del usuario para añadir proyecto: "))
+                # Probamos a ver si existe
+                try:
+                    # Si el usuario no existe en la base de datos
+                    if id_usuario <= 0 or id_usuario > len(base_usuario) + 2:
+                        # Lanza el IdError
+                        raise IdError
+                # Si salta el error
+                except IdError as ex:
+                    # Imprimimos el error
+                    print(ex)
+                    # Continuamos con el bucle
+                    continue
+                # Si el Id si que existe
+                else:
+                    # Iprimimos error y salimos del bucle
+                    print('ID encontrado.')
+                    break
+
+        # Pedimos el nombre del proyecto
+        nombre_proyecto= input("Ingrese el nombre del proyecto: ")
+        # Bucle que comprueba que la descripcion sea correcta, si no es así, que la vuelva a pedir
+        while True:
+            descripcion_proyecto = input("Ingrese una pequeña descripción del proyecto (80 palabras máximo): ")
+            # Probamos a ver si la descripcion es valida
+            try:
+                # Si la descripción contiene más de 80 carácteres
+                if len(descripcion_proyecto) > 80:
+                    # Lanza el error DescripcionError
+                    raise DescripcionError
+            # Si salta el error
+            except DescripcionError as ex:
+                # Imprimimos el error
+                print(ex)
+                # Continua el bucle
+                continue
+            # Si la descripcion es valida
+            else:
+                # Salimos del bucle
+                break
+
+        # Creamos un proyecto con los parámetros previamente comprobados
+        Proyecto(id_proyecto,id_usuario,nombre_proyecto,descripcion_proyecto)
+        # Añadimos el proyecto al diccionario self.proyectos donde key es el id del proyecto y values son
+        # sus carácterísticas
+        self.proyectos[id_proyecto]= {
+            'id_usuario': id_usuario,
+            'nombre_proyecto': nombre_proyecto,
+            'descripcion_proyecto': descripcion_proyecto,
+            'tareas_proyecto': {}
+        }
+
+        # Guardamos el diccionario actualizado en el arcghivo proyectos.json llamando a la funcion correspondiente
+        self.guardar_proyectos_json('proyectos.json')
+
+    # Método que se encarga de eliminar proyectos existentes
+    def eliminar_proyecto(self):
+        # Cargamos los proyectos existentes en self.proyectos llamando a la funcion que los abre
+        self.cargar_proyectos_json('proyectos.json')
+
+        print("Proyectos existentes:")
+        # Visualizamos todos los proyectos recorriendo todo el diccionario con un for key, value in .items()
+        for id_proyecto, proyecto in self.proyectos.items():
+            # Imprimimos los proyectos
+            print(
+                f"ID: {id_proyecto}, Nombre: {proyecto['nombre_proyecto']}, Descripción: {proyecto['descripcion_proyecto']}")
+
+        # Introducimos el id que desea eliminar
+        id_a_eliminar = input("Ingrese el ID del proyecto que desea eliminar: ")
+        # Si el id existe
+        if id_a_eliminar in self.proyectos:
+            # Eliminamos el proyecto cuyo id se ha introducido
+            del self.proyectos[id_a_eliminar]
+            print("Proyecto eliminado.")
+            # Guardamos el diccionario actualizado en archivo json llamando a la funcion que guarda los proyectos
+            self.guardar_proyectos_json('proyectos.json')
+        # Si no existe
+        else:
+            # Imprimimos que no existe
+            print("ID de proyecto no válido.")
+
+    # Método que permite ver los proyectos
+    def ver_proyecto(self):
+        # LLamamos a la funcion caragar proyectos y cargamos los proyectos en self.proyectos
+        self.cargar_proyectos_json('proyectos.json')
+        print("Proyectos existentes:")
+        # Visualizamos todos los proyectos recorriendo todo el diccionario con un for key, value in .items()
+        for id_proyecto, proyecto in self.proyectos.items():
+            # Imprimimos los proyectos
+            print(
+                f"ID: {id_proyecto}, Nombre: {proyecto['nombre_proyecto']}, Descripción: {proyecto['descripcion_proyecto']}, Tareas: {proyecto['tareas_proyecto']}")
+
