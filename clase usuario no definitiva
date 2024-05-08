@@ -1,0 +1,267 @@
+# Importamos la librería pandas, ya que para la base de datos de los usuarios la usaremos
+import pandas as pd
+# Importamos los errores necesarios creados en otros archivo
+from errores import NombreError,ApellidoError,IdError,CorreoError
+#
+import re
+
+class Usuario:
+    ''' Descripción Clase:
+        La usaremos para llamarla a la hora de crear un usuario en la clase UsuarioBase
+
+        Parámetros Clase:
+            id: Identificador que se le asigna al usuario de manera automática
+            Nombre: Nombre del usuario
+            Apellido: Apellido del usuario
+            Correo: Correo del usuario
+    '''
+    # definimos los siguientes paramentros necesarios para la información del usuario
+    def __init__(self, id, nombre, apellido, correo):
+        self.id = id
+        self.nombre = nombre
+        self.apellido = apellido
+        self.correo = correo
+
+    # Definimos el metodo str que nos proporcionará una representación legible para humanos de un usuario
+    def __str__(self):
+        return f"Nombre: {self.nombre}, Apellido: {self.apellido}, Correo: {self.correo}"
+
+
+class UsuarioBase:
+    ''' Descripción Clase:
+            La usaremos para añadir un usuario a nuestra base de datos y editar un usuario creado anteriormente o eliminarlo
+
+            Métodos Clase:
+                crear_usuario(): Encargado de crear un usuario y almacenarlo en la base de datos
+                editar_usuario(): Encargado de importar un usuario de la base, editarlo y volver a almacenarlo en ella
+                eliminar_usuario(): Encargado abrir la base de los usuarios y eliminar el que se requiera
+        '''
+
+    # Funcion con la que crearemos nuevos usuarios
+    def crear_usuario(self):
+        # Excepcion que comprueba si la base de datos del usuario esta creada
+        try:
+            # Leemos la base de datos
+            base_usuario = pd.read_csv('usuario_base.csv')
+            # Contamos los usuarios en el caso de que la base sea existente
+            num_usuarios = len(base_usuario) +1
+        # Si no existe la base, imprime el error
+        except FileNotFoundError:
+            # Y el nuemero de usuarios empieza en 1
+            num_usuarios = 1
+
+        # El id de los usuarios es el numero de estos +1, de esta manera el id será unico y exclusivo para cada usuario
+        id = num_usuarios
+        print(f'Tu id es {id}')
+        # Bucle para en el caso de que el nombre introducido por el usuario no cumpla los requisitos, lo vuelva a pedir
+        while True:
+            # Probamos a escribir el nombre
+            try:
+                nombre = input("Nombre: ")
+                # Si el nombre no contiene unicamente letras
+                if not nombre.isalpha():
+                    # Lanza el error NombreError
+                    raise NombreError(nombre)
+            # Si salta el error
+            except NombreError as ne:
+                # Imprimimos el error
+                print(ne)
+                # Continuamos con el bucle
+                continue
+            # Si el nombre cumple los requisitos
+            else:
+                # Salimos del bucle
+                break
+        # Bucle para en el caso de que el apellido introducido por el usuario no cumpla los requisitos, lo vuelva a pedir
+        while True:
+            # Probamos a escribir el apellido
+            try:
+                apellido = input("Apellido: ")
+                # Si el apellido no contiene unicamente letras
+                if not apellido.isalpha():
+                    # Lanza el error ApellidoError
+                    raise ApellidoError(apellido)
+            # Si el programa lanza el error
+            except ApellidoError as ae:
+                # Imprimimos el error
+                print(ae)
+                # Continuamos con el bucle
+                continue
+            # Si el apellido cumple los requisitos
+            else:
+                # Salimos del bucle
+                break
+        # Bucle para en el caso de que el correo introducido por el usuario no cumpla los requisitos, lo vuelva a pedir
+        while True:
+            # Expresion regular que indica como debe ser un correo correcto y valido
+            valido = r'[a-zA-Z0-9._]+@[a-z]+\.[a-zA-Z]{2,}'
+            # Probamos a introducir el correo
+            try:
+                correo = input("Correo: ")
+                # Si el correo no cumple con la expresion regular
+                if not re.match(valido, correo):
+                    # Lanzamos el error CorreoError
+                    raise CorreoError(correo)
+            # Si salta el error
+            except CorreoError as ce:
+                # Imprimimos el error
+                print(ce)
+                # Continuamos con el bucle
+                continue
+            # Si el correo introducido es correcto
+            else:
+                # Salimos del bucle
+                break
+
+        # Creamos un dataframe con la libreria pandas, donde guardaremos los parámetros de la clase Usuario ya verificados
+        # como validos
+        nuevo_usuario = pd.DataFrame({
+            "ID": [id],
+            "Nombre": [nombre],
+            "Apellido": [apellido],
+            "Correo": [correo]
+            })
+        # Si el id del usuario es el 1, por tanto la base de datos no esta creada
+        if id==1:
+            #creamos la base de datos en un archivo csv y guardamos en él, el dataframe creado anteriormente
+            nuevo_usuario.to_csv('usuario_base.csv', mode='w', header=True, index=False)
+        # Si la base de datos ya esta creada
+        else:
+            # Añadimos el dataframe creado anteriormente a la base de los usuarios
+            nuevo_usuario.to_csv('usuario_base.csv', mode='a', header=False, index=False)
+
+    # Metodo encargado de editar el usuario deseado
+    def editar_usuario(self):
+        # Abrimos la base de datos del csv y la guardamos en base_usuario
+        base_usuario = pd.read_csv('usuario_base.csv')
+        # Bucle que pide el usuario a editar, si no existe el usuario, lo vuelve a pedir
+        while True:
+            # Pedimos usuario
+            id_usuario = int(input("Ingrese el ID del usuario a editar: "))
+            # Comprobamos si el id existe
+            try:
+                # si el id no existe en la base de datos
+                if id_usuario <= 0 or id_usuario > len(base_usuario) + 2:
+                    # Lanzaos el error IdError
+                    raise IdError
+            # Si salta el error
+            except IdError as ex:
+                # Imprimimos el error
+                print(ex)
+                # Continuamos con el bucle
+                continue
+            # Si el Id existe
+            else:
+                # Pedimos al usuario que desea editar del usuario
+                print('Para editar el Nombre introduzca el 1.')
+                print('Para editar el Apellido introduzca el 2.')
+                print('Para editar el correo introduzca el 3.')
+                editar = int(input('Elige que quieres editar: '))
+                # Si desea editar el nombre
+                if editar == 1:
+                    # Bucle para en el caso de que el nombre introducido por el usuario no cumpla los requisitos, lo vuelva a pedir
+                    while True:
+                        # Probamos a escribir el nombre
+                        try:
+                            nombre = input("Nombre: ")
+                            # Si el nombre no contiene unicamente letras
+                            if not nombre.isalpha():
+                                # Lanza el error NombreError
+                                raise NombreError(nombre)
+                        # Si salta el error
+                        except NombreError as ne:
+                            # Imprimimos el error
+                            print(ne)
+                            # Continuamos con el bucle
+                            continue
+                        # Si el nombre cumple los requisitos
+                        else:
+                            # Sustituimos el anterior nombre por el nuevo nombre en la base de datos
+                            base_usuario.loc[base_usuario['ID'] == id_usuario, 'Nombre'] = nombre
+                            # Salimos del bucle
+                            break
+                # Si deseamos editar el apellido
+                elif editar == 2:
+                    # Bucle para en el caso de que el apellido introducido por el usuario no cumpla los requisitos, lo vuelva a pedir
+                    while True:
+                        # Probamos a escribir el apellido
+                        try:
+                            apellido = input("Apellido: ")
+                            # Si el apellido no contiene unicamente letras
+                            if not apellido.isalpha():
+                                # Lanza el error ApellidoError
+                                raise ApellidoError(apellido)
+                        # Si el programa lanza el error
+                        except ApellidoError as ae:
+                            # Imprimimos el error
+                            print(ae)
+                            # Continuamos con el bucle
+                            continue
+                        # Si el apellido cumple los requisitos
+                        else:
+                            # Sustituimos el aterior apellido por el nuevo en la base
+                            base_usuario.loc[base_usuario['ID'] == id_usuario, 'Apellido'] = apellido
+                            # Salimos del bucle
+                            break
+                # Si deseamos editar el correo
+                elif editar == 3:
+                    # Bucle para en el caso de que el correo introducido por el usuario no cumpla los requisitos, lo vuelva a pedir
+                    while True:
+                        # Expresion regular que indica como debe ser un correo correcto y valido
+                        valido = r'[a-zA-Z0-9._]+@[a-z]+\.[a-zA-Z]{2,}'
+                        # Probamos a introducir el correo
+                        try:
+                            correo = input("Correo: ")
+                            # Si el correo no cumple con la expresion regular
+                            if not re.match(valido, correo):
+                                # Lanzamos el error CorreoError
+                                raise CorreoError(correo)
+                        # Si salta el error
+                        except CorreoError as ce:
+                            # Imprimimos el error
+                            print(ce)
+                            # Continuamos con el bucle
+                            continue
+                        # Si el correo introducido es correcto
+                        else:
+                            # Sustituimos el apellido anterior por el nuevo en la base
+                            base_usuario.loc[base_usuario['ID'] == id_usuario, 'Correo'] = correo
+                            break
+                # Una vez cambiados todos atributos deseados, guardamos la nueva base de nuevo en el csv,
+                # sobreescribiendo la anterior
+                base_usuario.to_csv('usuario_base.csv', index=False)
+                # Una vez guardada la nueva base de datos, salimos del bucle
+                break
+
+    # Metodo encargado de eliminar el usuario deseado
+    def eliminar_usuario(self):
+        # Abrimos la base de datos del csv al atributo base_usuario en forma pandas
+        base_usuario = pd.read_csv('usuario_base.csv')
+        # Bucle que pide el ID del usuario a eliminar hasta que este sea valido
+        while True:
+            id_usuario = int(input("Ingrese el ID del usuario a eliminar: "))
+            # Probamos si el id es valido
+            try:
+                # Si el id no existe
+                if id_usuario <=0 or id_usuario > len(base_usuario)+2:
+                    # Lanza el error IdError
+                    raise IdError
+            # Si ha saltado el error
+            except IdError as ex:
+                # Imprimimos error
+                print(ex)
+                # Continuamos con el bucle
+                continue
+            # Si el Id existe
+            else:
+                #base_usuario = base_usuario[base_usuario['ID'] != id_usuario]
+                # Eliminamos el usuario de la base el cual su id coincide con el introducido
+                base_usuario.drop(base_usuario[base_usuario['ID'] == id_usuario].index, inplace=True)
+                # Sobreescribimos la antigua base de datos por la nueva con sus respectivos cambios
+                base_usuario.to_csv('usuario_base.csv', index=False)
+                print(f"Usuario con ID {id_usuario}, eliminado correctamente.")
+                # Salimos del bucle
+                break
+
+help(Usuario)
+help(UsuarioBase)
