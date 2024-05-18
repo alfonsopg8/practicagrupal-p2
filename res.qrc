@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="images">
+    <file>wallpaperCrearProyecto.png</file>
+    <file>wallpaperMenu.jpg</file>
+    <file>wallpaperMountainRegister.jpg</file>
+    <file>wallpaperMountain.jpg</file>
+  </qresource>
+  <qresource prefix="iconos">
+    <file>arrow-97-256.ico</file>
+    <file>contacts-128.ico</file>
+    <file>search-9-128.ico</file>
+    <file>menu-4-16.ico</file>
+    <file>close-window-128.ico</file>
+    <file>check-mark-2-128.ico</file>
+    <file>edit-property-128.ico</file>
+    <file>trash-9-128.ico</file>
+    <file>project-128.ico</file>
+  </qresource>
+</RCC>
