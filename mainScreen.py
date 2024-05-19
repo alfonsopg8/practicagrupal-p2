@@ -4,6 +4,7 @@ import main
 
 class Ui_mainScreen(object):
 
+
     def goCrearProyecto(self):
         from crearProyecto import Ui_crearProyectoScreen
         self.crear_proyecto = QtWidgets.QMainWindow()

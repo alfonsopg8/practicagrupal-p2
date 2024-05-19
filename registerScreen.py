@@ -35,23 +35,11 @@ class Ui_registerScreen(object):
 
     def ventana_error(self):
         import main
-        msg = QMessageBox()
-        msg.setWindowTitle("Error")
-        msg.setStyleSheet("QLabel{min-width: 500px;min-height: 100px;}")
-        if not main.dniok:
-            msg.setText("Corrige el DNI")
-            x = msg.exec_()
-        if not main.emailok:
-            msg.setText("Corrige el correo")
-            x = msg.exec_()
-        if not main.passwordok:
-            msg.setText("Corrige la contraseña")
-            x = msg.exec_()
-        if not main.nameok:
-            msg.setText("Corrige el nombre")
-            x = msg.exec_()
-        if not main.apellidook:
-            msg.setText("Corrige el apellido")
+        if not main.goLogin:
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setStyleSheet("QLabel{min-width: 500px;min-height: 100px;}")
+            msg.setText("Credenciales invalidos, reviselos")
             x = msg.exec_()
 
     #-----------------------------------------------
