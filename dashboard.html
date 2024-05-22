@@ -9,15 +9,21 @@
     <h1>Proyectos</h1>
     <ul>
         {% for proyecto in proyectos %}
-            <li>Nombre: {{ proyecto.nombre }}</li>
-            <li>Descripción: {{proyecto.descripcion }}</li>
-            <li>Tareas:
+            <li>
+                <strong>Nombre del proyecto:</strong> {{ proyecto.nombre }}
+                <br>
+                <strong>Descripción:</strong> {{ proyecto.descripcion }}
+                <br>
+                <strong>Tareas:</strong>
                 <ul>
                     {% for tarea in proyecto.tareas %}
-                        <li>{{ tarea.titulo }} - {{ tarea.descripcion }}</li>
+                        <li>
+                            {{ tarea.titulo }} : {{ tarea.descripcion }} (Estado: {{ tarea.estado }})
+                        </li>
                     {% endfor %}
                 </ul>
             </li>
+            <hr>
         {% endfor %}
     </ul>
 </body>
