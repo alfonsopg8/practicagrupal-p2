@@ -1,0 +1,95 @@
+from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+import main
+class Ui_Form(object):
+    def botonActualizar(self):
+        from mainScreen import Ui_mainScreen
+        from main import UsuarioBase
+        editar = UsuarioBase()
+        editar.editar_usuario(main.dni,self.cambiarNombre.text(),self.cambiarApellido.text(),self.cambiarCorreo.text())
+        self.mainScreen = QtWidgets.QMainWindow()
+        self.ui_main = Ui_mainScreen()
+        self.ui_main.setupUi(self.mainScreen)
+        self.mainScreen.show()
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(903, 588)
+        self.widget = QtWidgets.QWidget(Form)
+        self.widget.setGeometry(QtCore.QRect(10, 10, 881, 561))
+        self.widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.widget.setObjectName("widget")
+        self.label = QtWidgets.QLabel(self.widget)
+        self.label.setGeometry(QtCore.QRect(340, 50, 171, 51))
+        self.label.setMinimumSize(QtCore.QSize(171, 51))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label.setFont(font)
+        self.label.setStyleSheet("background-color: rgb(229, 229, 229);")
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        self.actualizarButton = QtWidgets.QPushButton(self.widget)
+        self.actualizarButton.setGeometry(QtCore.QRect(370, 390, 121, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.actualizarButton.setFont(font)
+        self.actualizarButton.setCheckable(True)
+        self.actualizarButton.setObjectName("actualizarButton")
+        self.widget1 = QtWidgets.QWidget(self.widget)
+        self.widget1.setGeometry(QtCore.QRect(80, 190, 721, 191))
+        self.widget1.setObjectName("widget1")
+        self.gridLayout = QtWidgets.QGridLayout(self.widget1)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.label_2 = QtWidgets.QLabel(self.widget1)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
+        self.cambiarNombre = QtWidgets.QLineEdit(self.widget1)
+        self.cambiarNombre.setPlaceholderText("")
+        self.cambiarNombre.setObjectName("cambiarNombre")
+        self.gridLayout.addWidget(self.cambiarNombre, 0, 1, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.widget1)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout.addWidget(self.label_3, 1, 0, 1, 1)
+        self.cambiarApellido = QtWidgets.QLineEdit(self.widget1)
+        self.cambiarApellido.setObjectName("cambiarApellido")
+        self.gridLayout.addWidget(self.cambiarApellido, 1, 1, 1, 1)
+        self.label_4 = QtWidgets.QLabel(self.widget1)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
+        self.cambiarCorreo = QtWidgets.QLineEdit(self.widget1)
+        self.cambiarCorreo.setObjectName("cambiarCorreo")
+        self.gridLayout.addWidget(self.cambiarCorreo, 2, 1, 1, 1)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+        #----------------------------------------------
+        self.actualizarButton.clicked.connect(self.botonActualizar)
+        #----------------------------------------------
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label.setText(_translate("Form", "Editar Datos"))
+        self.actualizarButton.setText(_translate("Form", "Actualizar"))
+        self.label_2.setText(_translate("Form", "Nuevo Nombre:"))
+        self.label_3.setText(_translate("Form", "Nuevo Apellido:"))
+        self.label_4.setText(_translate("Form", "Nuevo Correo:"))
+
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    ui = Ui_Form()
+    login = QtWidgets.QMainWindow()
+    ui.setupUi(login)
+    login.show()
+    sys.exit(app.exec_())
