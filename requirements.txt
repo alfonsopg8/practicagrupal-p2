@@ -1,0 +1,11 @@
+pyqt5
+pyqt5-tools
+sys
+re
+json
+matplotlib
+figurecanvas
+seaborn 
+sqlite3
+bcrypt
+flask
