@@ -1,9 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-
+from PyQt5.QtWidgets import QMessageBox
 import main
 from registerScreen import Ui_registerScreen
 from main import botonLogin
+from errores import DniError
+import sqlite3
 
 class Ui_loginScreen(object):
     #-----------------My functions-----------------
@@ -14,13 +16,28 @@ class Ui_loginScreen(object):
         self.register_window.show()
         self.loginWindow.close()
 
-    #def action(self):
-        #process(self,self.dniLogin.text(),self.contrasenaLogin.text(),self.loginWindow)
-
     def sendBotonLogin(self):
-        botonLogin(self,self.dniLogin.text(),self.contrasenaLogin.text(),self.loginWindow)
-        main.dniLogin = self.dniLogin.text()
-        main.getInfo()
+        from mainScreen import Ui_mainScreen
+        from main import UsuarioBase
+        usuariodb = UsuarioBase()
+        try:
+            usuariodb.cursor.execute('SELECT * FROM usuarios WHERE dni = ?', (self.dniLogin.text(),))
+            usuario = usuariodb.cursor.fetchone()
+            if not usuario:
+                raise DniError(self.dniLogin.text())
+        except DniError as ex:
+            print(ex)
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setStyleSheet("QLabel{min-width: 500px;min-height: 100px;}")
+            msg.setText("Credenciales invalidas o Usuario inexistente")
+            msg.exec_()  # Correct use of exec_() to show the message box
+        else:
+            print('else')
+            main.botonLogin(self, self.dniLogin.text(), self.contrasenaLogin.text(), self.loginWindow)
+            main.dniLogin = self.dniLogin.text()
+            main.getInfo()
+            self.goMainScreen()
 
     def goMainScreen(self):
         from mainScreen import Ui_mainScreen
@@ -143,7 +160,7 @@ class Ui_loginScreen(object):
         # -----------------My Code-----------------
         self.registerButtonLogin.clicked.connect(self.register)
         self.loginButton.clicked.connect(self.sendBotonLogin)
-        self.loginButton.clicked.connect(self.goMainScreen)
+        #self.loginButton.clicked.connect(self.goMainScreen)
         # ------------------------------------------
 
 

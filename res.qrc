@@ -6,6 +6,8 @@
     <file>wallpaperMountain.jpg</file>
   </qresource>
   <qresource prefix="iconos">
+    <file>add-list-256.ico</file>
+    <file>arrow-32-256.ico</file>
     <file>arrow-97-256.ico</file>
     <file>contacts-128.ico</file>
     <file>search-9-128.ico</file>

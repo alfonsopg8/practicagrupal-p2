@@ -1,13 +1,27 @@
 import sqlite3
 import re
-from errores import NombreError, ApellidoError, IdError, CorreoError, DniError, DescripcionError
+
+import main
+from errores import NombreError, ApellidoError, IdError, CorreoError, DniError, DescripcionError, ProyectoNoEncontradoError, TituloError
 import bcrypt
 import json
+
+boton_proyecto = 0
+boton_tareas = 0
 
 name = ''
 lastname = ''
 dni = ''
 mail = ''
+
+idproyecto = ''
+nombre_proyecto = ''
+descripcion_proyecto = ''
+
+idtarea = ''
+nombre_tarea = ''
+descripcion_tarea = ''
+estado_tarea = ''
 
 global goLogin, dniok, nombreok, apellidook, correook
 goLogin = False
@@ -15,7 +29,6 @@ dniok = False
 nombreok = False
 apellidook = False
 correook = False
-
 
 def get_info_by_dni(dni):
     try:
@@ -217,16 +230,247 @@ class GestorSistema:
             print("ID de proyecto o DNI no válido.")
 
     # Método que permite ver los proyectos
-    def ver_proyecto(self):
-        # Llamamos a la función cargar proyectos y cargamos los proyectos en self.proyectos
-        self.cargar_proyectos_json('proyectos.json')
-        print("Proyectos existentes:")
-        # Visualizamos todos los proyectos recorriendotodo el diccionario con un for key, value in .items()
-        for dni, proyectos_usuario in self.proyectos.items():
-            for id_proyecto, proyecto in proyectos_usuario.items():
-                # Imprimimos los proyectos
-                print(f"DNI: {dni}, ID: {id_proyecto}, Nombre: {proyecto['nombre_proyecto']}, Descripción: {proyecto['descripcion_proyecto']}, Tareas: {proyecto['tareas_proyecto']}")
+    def ver_proyecto(self, dni):
+        global boton_proyecto
+        global idproyecto
+        global nombre_proyecto
+        global descripcion_proyecto
 
+        # Cargamos los proyectos desde proyectos.json
+        with open('proyectos.json', 'r') as json_file:
+            proyectos = json.load(json_file)
+
+        # Extraemos los proyectos del usuario especificado por el dni
+        proyectos_usuario = proyectos.get(dni, {})
+        #cantidad_proyectos = len(proyectos_usuario)
+
+        idproyecto = str(boton_proyecto)
+        #cantidad_tareas = len(proyectos_usuario[idproyecto]['tareas_proyecto'])
+        nombre_proyecto = proyectos_usuario[idproyecto]['nombre_proyecto']
+        descripcion_proyecto = proyectos_usuario[idproyecto]['descripcion_proyecto']
+        print(idproyecto, nombre_proyecto, descripcion_proyecto)
+
+
+
+        print('-----------')
+    def ver_tareas(self,dni):
+        global boton_tareas
+        global boton_proyecto
+        global idtarea
+        global nombre_tarea
+        global descripcion_tarea
+        global estado_tarea
+
+        print(boton_proyecto)
+
+        with open('proyectos.json', 'r') as json_file:
+            proyectos = json.load(json_file)
+        proyectos_usuario = proyectos.get(dni, {})
+        idtarea = str(boton_tareas + 1)
+        print()
+        if proyectos_usuario[str(boton_proyecto)]['tareas_proyecto'] != {}:
+            nombre_tarea = proyectos_usuario[str(boton_proyecto)]['tareas_proyecto'][idtarea]['titulo']
+            descripcion_tarea = proyectos_usuario[str(boton_proyecto)]['tareas_proyecto'][idtarea]['descripcion']
+            estado_tarea = proyectos_usuario[str(boton_proyecto)]['tareas_proyecto'][idtarea]['estado']
+            print(idtarea, nombre_tarea, descripcion_tarea, estado_tarea)
+        else:
+            nombre_tarea = 'No tienes tareas'
+            descripcion_tarea = 'No tienes tareas'
+            estado_tarea = 'pendiente'
+            print(idtarea, nombre_tarea, descripcion_tarea, estado_tarea)
+
+class Tarea:
+    def cambiar_pendiente(self):
+        global idtarea
+        global idproyecto
+        global dni
+
+        # Abrimos el archivo
+        with open('proyectos.json', 'r') as json_file:
+            # Guardamos el diccionario perteneciente al json en el atributo proyectos
+            proyectos = json.load(json_file)
+
+        proyectos[dni][idproyecto]['tareas_proyecto'][idtarea]['estado'] = "pendiente"
+
+        # Abrimos el archivo json en modo escritura
+        with open('proyectos.json', 'w') as json_file:
+            # Guardamos en él, el diccionario proyectos actualizado
+            json.dump(proyectos, json_file, indent=4)
+
+    def cambiar_en_curso(self):
+        global idtarea
+        global idproyecto
+        global dni
+
+        # Abrimos el archivo
+        with open('proyectos.json', 'r') as json_file:
+            # Guardamos el diccionario perteneciente al json en el atributo proyectos
+            proyectos = json.load(json_file)
+
+        proyectos[dni][idproyecto]['tareas_proyecto'][idtarea]['estado'] = "en curso"
+
+        # Abrimos el archivo json en modo escritura
+        with open('proyectos.json', 'w') as json_file:
+            # Guardamos en él, el diccionario proyectos actualizado
+            json.dump(proyectos, json_file, indent=4)
+
+    def cambiar_completada(self):
+        global idtarea
+        global idproyecto
+        global dni
+
+        # Abrimos el archivo
+        with open('proyectos.json', 'r') as json_file:
+            # Guardamos el diccionario perteneciente al json en el atributo proyectos
+            proyectos = json.load(json_file)
+
+        proyectos[dni][idproyecto]['tareas_proyecto'][idtarea]['estado'] = "completada"
+
+        # Abrimos el archivo json en modo escritura
+        with open('proyectos.json', 'w') as json_file:
+            # Guardamos en él, el diccionario proyectos actualizado
+            json.dump(proyectos, json_file, indent=4)
+
+    def __str__(self):
+        return f'Id: {self.id_tarea}, {self.titulo}: {self.descripcion}. {self.estado}.'
+
+
+class Proyecto:
+    '''
+    Descripcion Clase:
+    Esta clase se encargará de permitir que la clase GestorSistema pueda llamarla para crear proyectos.
+    Además, será la encargada de añadir tareas al proyecto, además de visualizarlas
+
+    Parametros Clase:
+    id_proyecto: Identificador del proyecto, lo hace diferente del resto
+    id_usuario: Identificador del usuario al que se le ha asignado el proyecto
+    nombre: Nombre del proyecto
+    descripcion: Descripcion del proyecto, de que trata
+
+    Métodos Clase:
+    __init__: Inicializa los parametros comentados anteriormente permitiendo la creacion de un proyecto al llamarla en
+    la clase GestorSistema.
+    agregar_tarea: Encargado de agregar tareas al proyecto desado almacenandolas en un archivo json
+    mostrar_tarea: Encargado de mostrar las tarea que tiene un proyecto
+    '''
+
+    # Constructor de la clase, inicializa los parametros
+    def __init__(self):
+        self.tareas = []
+
+    def verificar_titulo(self, titulo):
+        # Probamos a escribir el título
+        try:
+            if not titulo:
+                # Lanzamos el error TituloError
+                raise TituloError("El título no puede estar vacío")
+        # Si el error salta
+        except TituloError as te:
+            # Imprimimos error
+            print(te)
+            titulo_verificado = False
+        # Si el título es válido
+        else:
+            titulo_verificado = True
+        return titulo_verificado
+
+    def verificar_descripcion(self, descripcion):
+        try:
+            if len(descripcion) > 80:
+                # Se lanza el error DescripcionError
+                raise DescripcionError("La descripción no puede exceder los 80 caracteres")
+        # Si el error salta
+        except DescripcionError as de:
+            # Imprimimos el error
+            print(de)
+            descripcion_validada = False
+        # Si la descripción es correcta
+        else:
+            descripcion_validada = True
+        return descripcion_validada
+
+    # Método encargado de añadir tareas al proyecto
+    def agregar_tarea(self, dni, id_proyecto, nombre, descripcion):
+        try:
+            with open('proyectos.json', 'r') as json_file:
+                # Cargamos el diccionario desde el archivo JSON
+                proyectos = json.load(json_file)
+        except FileNotFoundError:
+            print("Archivo proyectos.json no encontrado")
+            return
+        except json.JSONDecodeError:
+            print("Error al decodificar el archivo JSON")
+            return
+        except Exception as e:
+            print(f"Error inesperado al leer el archivo: {e}")
+            return
+
+        # Verificamos si el DNI y el ID del proyecto existen en el diccionario
+        if dni in proyectos and str(id_proyecto) in proyectos[dni]:
+            proyecto_actual = proyectos[dni][str(id_proyecto)]
+
+            # Inicializamos el ID de la tarea
+            if "tareas_proyecto" in proyecto_actual:
+                id_tarea = max((int(key) for key in proyecto_actual["tareas_proyecto"].keys()), default=0) + 1
+            else:
+                proyecto_actual["tareas_proyecto"] = {}
+                id_tarea = 1
+        else:
+            print("Usuario o proyecto no encontrado")
+            return
+
+        # Validamos el nombre y la descripción
+        titulo_verificado= self.verificar_titulo(nombre)
+        descripcion_validada = self.verificar_descripcion(descripcion)
+        estado = 'pendiente'
+
+        if descripcion_validada:
+            nueva_tarea = {
+                'id': id_tarea,
+                'titulo': nombre,
+                'descripcion': descripcion,
+                'estado': estado
+            }
+
+            # Añadimos la nueva tarea al proyecto
+            proyecto_actual["tareas_proyecto"][str(id_tarea)] = nueva_tarea
+
+            try:
+                # Guardamos el diccionario actualizado en el archivo JSON
+                with open('proyectos.json', 'w') as json_file:
+                    json.dump(proyectos, json_file, indent=4)
+
+                print("Tarea agregada correctamente")
+            except Exception as e:
+                print(f"Error inesperado al escribir el archivo: {e}")
+        else:
+            print("Nombre o descripción no válidos")
+
+    # Método que nos permite visualizar las tareas del proyecto
+    def mostrar_tarea(self):
+        # Probamos a abrir el archivo json en modo lectura
+        try:
+            with open('proyectos.json', 'r') as json_file:
+                # Guardamos el diccionario del json en el atributo proyectos
+                proyectos = json.load(json_file)
+        except FileNotFoundError:
+            print("Archivo de proyectos no encontrado.")
+            return
+
+        # Verificamos si el DNI del usuario y el ID del proyecto existen
+        if self.dni in proyectos and str(self.id_proyecto) in proyectos[self.dni]:
+            # Obtenemos las tareas del proyecto
+            tareas = proyectos[self.dni][str(self.id_proyecto)].get('tareas_proyecto', {})
+            # Si hay tareas, las imprimimos
+            if tareas:
+                print(f'Tareas del proyecto {self.id_proyecto}:')
+                for id_tarea, tarea in tareas.items():
+                    print(
+                        f"ID: {id_tarea}, Título: {tarea['titulo']}, Descripción: {tarea['descripcion']}, Estado: {tarea['estado']}")
+            else:
+                print("No hay tareas en este proyecto.")
+        else:
+            print("Proyecto o usuario no encontrado.")
 
 
 # -----------Usuario------------
@@ -361,47 +605,21 @@ class UsuarioBase:
             goLogin = False
             print('ERROR!')
 
-    def editar_usuario(self):
-        dni = self.validar_dni(self.dniRegister.text())
-        try:
-            self.cursor.execute('SELECT * FROM usuarios WHERE dni = ?', (dni,))
-            usuario = self.cursor.fetchone()
-            if not usuario:
-                raise DniError(dni)
-        except DniError as ex:
-            print(ex)
-            return
+    def editar_usuario(self, dni, nombre, apellido, correo):
+        nombre_validado = self.validar_nombre(nombre)
+        apellido_validado = self.validar_apellidos(apellido)
+        correo_validado = self.validar_correo(correo)
 
-        print('Para editar el Nombre introduzca el 1.')
-        print('Para editar el Apellido introduzca el 2.')
-        print('Para editar el correo introduzca el 3.')
-        editar = int(input('Elige que quieres editar: '))
-
-        if editar == 1:
-            nombre = self.validar_nombre()
+        if nombre_validado and apellido_validado and correo_validado:
             self.cursor.execute('UPDATE usuarios SET nombre = ? WHERE dni = ?', (nombre, dni))
             self.conn.commit()
-        elif editar == 2:
-            apellido = self.validar_apellidos()
             self.cursor.execute('UPDATE usuarios SET apellido = ? WHERE dni = ?', (apellido, dni))
             self.conn.commit()
-        elif editar == 3:
-            correo = self.validar_correo()
             self.cursor.execute('UPDATE usuarios SET correo = ? WHERE dni = ?', (correo, dni))
             self.conn.commit()
+            print("Usuario editado correctamente.")
 
-        print("Usuario editado correctamente.")
-
-    def eliminar_usuario(self):
-        dni = self.validar_dni(self.dniRegister.text())
-        try:
-            self.cursor.execute('SELECT * FROM usuarios WHERE dni = ?', (dni,))
-            usuario = self.cursor.fetchone()
-            if not usuario:
-                raise DniError(dni)
-        except DniError as ex:
-            print(ex)
-            return
+    def eliminar_usuario(self, dni):
 
         self.cursor.execute('DELETE FROM usuarios WHERE dni = ?', (dni,))
         self.conn.commit()

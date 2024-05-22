@@ -1,16 +1,84 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import main
+from PyQt5.QtWidgets import QMessageBox
+eliminado = False
 
 class Ui_mainScreen(object):
+    def eliminarUsuario(self):
+        from main import UsuarioBase
+        from loginScreen import Ui_loginScreen
+        global eliminado
+        self.confirmacion_eliminarCuenta()
+        if eliminado:
+            eliminar = UsuarioBase()
+            eliminar.eliminar_usuario(main.dni)
+            self.main_window.close()
+            self.login_window = QtWidgets.QMainWindow()
+            self.ui_register = Ui_loginScreen()
+            self.ui_register.setupUi(self.login_window)
+            self.login_window.show()
 
+    def confirmacion_eliminarCuenta(self):
+        global eliminado
 
+        # Create message box
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setWindowTitle('Confirma la eliminación')
+        msg_box.setText('¿Seguro que desea eliminar su cuenta?')
+
+        # Add Yes and No buttons
+        yes_button = msg_box.addButton(QMessageBox.Yes)
+        no_button = msg_box.addButton(QMessageBox.No)
+
+        # Set default button (optional)
+        msg_box.setDefaultButton(no_button)
+
+        # Show message box
+        msg_box.exec_()
+
+        # Check which button was clicked
+        if msg_box.clickedButton() == yes_button:
+            eliminado = True
+        else:
+            eliminado = False
+        print(eliminado)
+
+    def abrirEstadisticas(self):
+        from estadisticas import EstadisticasApp
+        self.estadisticas_window = EstadisticasApp()
+        self.estadisticas_window.show()
+
+    def abrirEditarDatos(self):
+        from editarDatosScreen import Ui_Form
+        self.editar_dato = QtWidgets.QMainWindow()
+        self.ui_editarDato = Ui_Form()
+        self.ui_editarDato.setupUi(self.editar_dato)
+        self.editar_dato.show()
+        self.main_window.close()
+
+    def goVerProyecto(self):
+        from verProyectoScreen import Ui_verProyecto
+        self.ver_proyecto = QtWidgets.QMainWindow()
+        self.ui_verProyecto = Ui_verProyecto()
+        self.ui_verProyecto.setupUi(self.ver_proyecto)
+        self.ver_proyecto.show()
+        self.main_window.close()
     def goCrearProyecto(self):
         from crearProyecto import Ui_crearProyectoScreen
         self.crear_proyecto = QtWidgets.QMainWindow()
         self.ui_crearProyecto = Ui_crearProyectoScreen()
         self.ui_crearProyecto.setupUi(self.crear_proyecto)
         self.crear_proyecto.show()
+        self.main_window.close()
+
+    def goCrearTarea(self):
+        from crearTareaScreen import Ui_crearTareaScreen
+        self.crear_tarea = QtWidgets.QMainWindow()
+        self.ui_crearTarea = Ui_crearTareaScreen()
+        self.ui_crearTarea.setupUi(self.crear_tarea)
+        self.crear_tarea.show()
         self.main_window.close()
     def setupUi(self, mainScreen):
         self.main_window = mainScreen
@@ -103,17 +171,17 @@ class Ui_mainScreen(object):
         self.crearProyectoButton.setCheckable(True)
         self.crearProyectoButton.setObjectName("crearProyectoButton")
         self.verticalLayout_4.addWidget(self.crearProyectoButton)
-        self.eliminarProyectoButton = QtWidgets.QPushButton(self.page_5)
+        self.crearTareaButton = QtWidgets.QPushButton(self.page_5)
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.eliminarProyectoButton.setFont(font)
-        self.eliminarProyectoButton.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.crearTareaButton.setFont(font)
+        self.crearTareaButton.setFocusPolicy(QtCore.Qt.NoFocus)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("trash-9-128.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.eliminarProyectoButton.setIcon(icon2)
-        self.eliminarProyectoButton.setCheckable(False)
-        self.eliminarProyectoButton.setObjectName("eliminarProyectoButton")
-        self.verticalLayout_4.addWidget(self.eliminarProyectoButton)
+        icon2.addPixmap(QtGui.QPixmap("add-list-256.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.crearTareaButton.setIcon(icon2)
+        self.crearTareaButton.setCheckable(False)
+        self.crearTareaButton.setObjectName("crearTareaButton")
+        self.verticalLayout_4.addWidget(self.crearTareaButton)
         spacerItem = QtWidgets.QSpacerItem(20, 393, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
         self.toolBox.addItem(self.page_5, icon, "")
@@ -263,6 +331,30 @@ class Ui_mainScreen(object):
         self.inputCorreo.setObjectName("inputCorreo")
         self.horizontalLayout_5.addWidget(self.inputCorreo)
         self.gridLayout_2.addLayout(self.horizontalLayout_5, 3, 0, 1, 1)
+        self.estadisticasButton = QtWidgets.QPushButton(self.tab_5)
+        self.estadisticasButton.setGeometry(QtCore.QRect(280, 550, 251, 71))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.estadisticasButton.setFont(font)
+        self.estadisticasButton.setStyleSheet("background-color: #06162d;\n"
+"color: #fff;")
+        self.estadisticasButton.setObjectName("estadisticasButton")
+        self.editarDatosButton = QtWidgets.QPushButton(self.tab_5)
+        self.editarDatosButton.setGeometry(QtCore.QRect(620, 410, 151, 41))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.editarDatosButton.setFont(font)
+        self.editarDatosButton.setStyleSheet("background-color: #04162a;\n"
+"color: #fff;")
+        self.editarDatosButton.setObjectName("editarDatosButton")
+        self.eliminarUsuarioButton = QtWidgets.QPushButton(self.tab_5)
+        self.eliminarUsuarioButton.setGeometry(QtCore.QRect(20, 410, 151, 41))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.eliminarUsuarioButton.setFont(font)
+        self.eliminarUsuarioButton.setStyleSheet("background-color: #04162a;\n"
+"color: #fff;")
+        self.eliminarUsuarioButton.setObjectName("eliminarUsuarioButton")
         self.tabWidget.addTab(self.tab_5, "")
         self.gridLayout.addWidget(self.tabWidget, 1, 0, 1, 1)
 
@@ -274,6 +366,11 @@ class Ui_mainScreen(object):
 
         #----------------------------------------
         self.crearProyectoButton.clicked.connect(self.goCrearProyecto)
+        self.crearTareaButton.clicked.connect(self.goCrearTarea)
+        self.verProyectoButton.clicked.connect(self.goVerProyecto)
+        self.estadisticasButton.clicked.connect(self.abrirEstadisticas)
+        self.editarDatosButton.clicked.connect(self.abrirEditarDatos)
+        self.eliminarUsuarioButton.clicked.connect(self.eliminarUsuario)
 
         #----------------------------------------
 
@@ -284,7 +381,7 @@ class Ui_mainScreen(object):
         self.toolBox.setItemText(self.toolBox.indexOf(self.page), _translate("mainScreen", "Página"))
         self.verProyectoButton.setText(_translate("mainScreen", "Ver Proyecto"))
         self.crearProyectoButton.setText(_translate("mainScreen", "Crear Proyecto"))
-        self.eliminarProyectoButton.setText(_translate("mainScreen", "Eliminar Proyecto"))
+        self.crearTareaButton.setText(_translate("mainScreen", "Crear Tarea"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_5), _translate("mainScreen", "Proyecto"))
         self.toDoButton.setText(_translate("mainScreen", "To Do"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_6), _translate("mainScreen", "To Do"))
@@ -296,6 +393,9 @@ class Ui_mainScreen(object):
         self.inputDNI.setText(_translate("mainScreen", main.dni))
         self.label_5.setText(_translate("mainScreen", "Correo: "))
         self.inputCorreo.setText(_translate("mainScreen", main.mail))
+        self.estadisticasButton.setText(_translate("mainScreen", "Estadísticas"))
+        self.editarDatosButton.setText(_translate("mainScreen", "Editar Datos"))
+        self.eliminarUsuarioButton.setText(_translate("mainScreen", "Eliminar Usuario"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("mainScreen", "Página"))
 
 

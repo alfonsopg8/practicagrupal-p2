@@ -6,8 +6,14 @@ class Ui_crearProyectoScreen(object):
     def crearProyectofuncion(self):
         import main
         from main import GestorSistema
+        from mainScreen import Ui_mainScreen
         proyecto = GestorSistema()
         proyecto.add_proyecto(main.dni,self.nombreProyectoCreado.text(), self.descripcionProyectoCreado.text())
+        self.main_window = QtWidgets.QMainWindow()
+        self.ui_mainScreen = Ui_mainScreen()
+        self.ui_mainScreen.setupUi(self.main_window)
+        self.main_window.show()
+        self.crear_proyecto.close()
     def goBack(self):
         from mainScreen import Ui_mainScreen
         self.main_window = QtWidgets.QMainWindow()

@@ -222,11 +222,11 @@ border: none;</string>
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>Eliminar Proyecto</string>
+          <string>Crear Tarea</string>
          </property>
          <property name="icon">
           <iconset resource="res.qrc">
-           <normaloff>:/iconos/trash-9-128.ico</normaloff>:/iconos/trash-9-128.ico</iconset>
+           <normaloff>:/iconos/add-list-256.ico</normaloff>:/iconos/add-list-256.ico</iconset>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -633,6 +633,72 @@ color: #fff;</string>
            </layout>
           </item>
          </layout>
+        </widget>
+        <widget class="QPushButton" name="estadisticasButton">
+         <property name="geometry">
+          <rect>
+           <x>280</x>
+           <y>550</y>
+           <width>251</width>
+           <height>71</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #06162d;
+color: #fff;</string>
+         </property>
+         <property name="text">
+          <string>Estadísticas</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="editarDatosButton">
+         <property name="geometry">
+          <rect>
+           <x>620</x>
+           <y>410</y>
+           <width>151</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #04162a;
+color: #fff;</string>
+         </property>
+         <property name="text">
+          <string>Editar Datos</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="eliminarUsuarioButton">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>410</y>
+           <width>151</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #04162a;
+color: #fff;</string>
+         </property>
+         <property name="text">
+          <string>Eliminar Usuario</string>
+         </property>
         </widget>
        </widget>
       </widget>
