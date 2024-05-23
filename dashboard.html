@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Proyectos</h1>
+    <ul>
+        {% for proyecto in proyectos %}
+            <li>
+                <strong>Nombre del proyecto:</strong> {{ proyecto.nombre }}
+                <br>
+                <strong>Descripción:</strong> {{ proyecto.descripcion }}
+                <br>
+                <strong>Tareas:</strong>
+                <ul>
+                    {% for tarea in proyecto.tareas %}
+                        <li>
+                            {{ tarea.titulo }} : {{ tarea.descripcion }} (Estado: {{ tarea.estado }})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+</body>
+</html>
