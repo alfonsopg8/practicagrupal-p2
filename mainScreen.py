@@ -5,6 +5,25 @@ from PyQt5.QtWidgets import QMessageBox
 eliminado = False
 
 class Ui_mainScreen(object):
+    """
+    Elimina un usuario de la base de datos y redirige a la pantalla de inicio de sesión.
+
+    Importa los módulos necesarios, muestra una confirmación para eliminar la cuenta,
+    y si es confirmado, elimina el usuario usando `UsuarioBase`. Luego, cierra la ventana
+    principal y abre la ventana de inicio de sesión.
+
+    Dependencies:
+    - main: Module containing global variables, including `dni` of the user.
+    - UsuarioBase: Class for user operations in the database.
+    - Ui_loginScreen: Class for the login screen UI.
+    - QtWidgets.QMainWindow: PyQt5 class for main window operations.
+
+    Side-effects:
+    - Modifies the global variable `eliminado`.
+
+    Note:
+    - The function `confirmacion_eliminarCuenta` is called to get user confirmation.
+    """
     def eliminarUsuario(self):
         from main import UsuarioBase
         from loginScreen import Ui_loginScreen
@@ -20,6 +39,19 @@ class Ui_mainScreen(object):
             self.login_window.show()
 
     def confirmacion_eliminarCuenta(self):
+        """
+        Muestra una ventana de confirmación para la eliminación de la cuenta del usuario.
+
+        Crea un cuadro de mensaje con opciones "Yes" y "No" para que el usuario confirme la
+        eliminación de su cuenta. Si el usuario confirma, modifica la variable global `eliminado`
+        a `True`, de lo contrario, a `False`.
+
+        Side-effects:
+        - Modifies the global variable `eliminado`.
+
+        Note:
+        - Utiliza `QMessageBox` de PyQt5 para mostrar el cuadro de mensaje.
+        """
         global eliminado
 
         # Create message box
@@ -46,11 +78,22 @@ class Ui_mainScreen(object):
         print(eliminado)
 
     def abrirEstadisticas(self):
+        """
+        Abre la ventana de estadísticas.
+
+        Importa el módulo `EstadisticasApp` y muestra la ventana de estadísticas.
+        """
         from estadisticas import EstadisticasApp
         self.estadisticas_window = EstadisticasApp()
         self.estadisticas_window.show()
 
     def abrirEditarDatos(self):
+        """
+        Abre la ventana para editar datos del usuario.
+
+        Importa el módulo `Ui_Form` y muestra la ventana de edición de datos.
+        Cierra la ventana principal actual.
+        """
         from editarDatosScreen import Ui_Form
         self.editar_dato = QtWidgets.QMainWindow()
         self.ui_editarDato = Ui_Form()
@@ -59,6 +102,12 @@ class Ui_mainScreen(object):
         self.main_window.close()
 
     def goVerProyecto(self):
+        """
+        Abre la ventana para ver proyectos.
+
+        Importa el módulo `Ui_verProyecto` y muestra la ventana de ver proyectos.
+        Cierra la ventana principal actual.
+        """
         from verProyectoScreen import Ui_verProyecto
         self.ver_proyecto = QtWidgets.QMainWindow()
         self.ui_verProyecto = Ui_verProyecto()
@@ -66,6 +115,12 @@ class Ui_mainScreen(object):
         self.ver_proyecto.show()
         self.main_window.close()
     def goCrearProyecto(self):
+        """
+        Abre la ventana para crear un nuevo proyecto.
+
+        Importa el módulo `Ui_crearProyectoScreen` y muestra la ventana de creación de proyectos.
+        Cierra la ventana principal actual.
+        """
         from crearProyecto import Ui_crearProyectoScreen
         self.crear_proyecto = QtWidgets.QMainWindow()
         self.ui_crearProyecto = Ui_crearProyectoScreen()
@@ -74,6 +129,12 @@ class Ui_mainScreen(object):
         self.main_window.close()
 
     def goCrearTarea(self):
+        """
+        Abre la ventana para crear una nueva tarea.
+
+        Importa el módulo `Ui_crearTareaScreen` y muestra la ventana de creación de tareas.
+        Cierra la ventana principal actual.
+        """
         from crearTareaScreen import Ui_crearTareaScreen
         self.crear_tarea = QtWidgets.QMainWindow()
         self.ui_crearTarea = Ui_crearTareaScreen()
@@ -81,6 +142,17 @@ class Ui_mainScreen(object):
         self.crear_tarea.show()
         self.main_window.close()
     def setupUi(self, mainScreen):
+        """
+        Configura la interfaz de usuario para la pantalla principal.
+
+        Establece la geometría, el estilo y los widgets de la ventana principal `mainScreen`.
+        También define las conexiones de los botones a sus respectivas funciones.
+
+        Parameters
+        ----------
+        mainScreen : QtWidgets.QMainWindow
+            La ventana principal de la aplicación.
+        """
         self.main_window = mainScreen
         mainScreen.setObjectName("mainScreen")
         mainScreen.resize(1099, 850)
@@ -375,6 +447,14 @@ class Ui_mainScreen(object):
         #----------------------------------------
 
     def retranslateUi(self, mainScreen):
+        """
+        Retraduce la interfaz de usuario, estableciendo los textos de los widgets.
+
+        Parameters
+        ----------
+        mainScreen : QtWidgets.QMainWindow
+            La ventana principal de la aplicación.
+        """
         _translate = QtCore.QCoreApplication.translate
         mainScreen.setWindowTitle(_translate("mainScreen", "Form"))
         self.pushButton.setText(_translate("mainScreen", "Account"))
@@ -398,6 +478,7 @@ class Ui_mainScreen(object):
         self.eliminarUsuarioButton.setText(_translate("mainScreen", "Eliminar Usuario"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("mainScreen", "Página"))
 
+help(Ui_mainScreen())
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

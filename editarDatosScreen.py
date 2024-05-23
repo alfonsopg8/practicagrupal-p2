@@ -10,8 +10,13 @@ class Ui_Form(object):
     def botonActualizar(self):
         """
         Maneja el evento de clic en el botón de actualizar.
+
+        Realiza las siguientes acciones:
+        1. Importa las clases necesarias para la actualización y navegación de la interfaz.
+        2. Crea una instancia de `UsuarioBase` para editar el usuario con los datos proporcionados.
+        3. Configura y muestra la nueva ventana principal.
+        4. Cierra la ventana de edición.
         """
-        # Importaciones específicas
         from mainScreen import Ui_mainScreen
         from main import UsuarioBase
         from loginScreen import Ui_loginScreen
@@ -31,6 +36,14 @@ class Ui_Form(object):
 
 
     def setupUi(self, Form):
+        """
+        Configura la interfaz de usuario de la ventana de edición de datos.
+
+        Parameters
+        ----------
+        Form : QtWidgets.QMainWindow
+            Ventana principal de la aplicación.
+        """
         self.editar = Form
         """
         Configura la interfaz de usuario de la ventana de edición de datos.
@@ -131,6 +144,7 @@ class Ui_Form(object):
         self.label_3.setText(_translate("Form", "Nuevo Apellido:"))
         self.label_4.setText(_translate("Form", "Nuevo Correo:"))
 
+help(Ui_Form())
 
 if __name__ == "__main__":
     # Configuración de la aplicación y ejecución

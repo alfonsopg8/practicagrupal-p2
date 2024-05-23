@@ -6,8 +6,8 @@
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "Diseño de UI/UX",
-                    "descripcion": "Crear el diseño de interfaz y experiencia de usuario.",
+                    "titulo": "Dise\u00c3\u00b1o de UI/UX",
+                    "descripcion": "Crear el dise\u00c3\u00b1o de interfaz y experiencia de usuario.",
                     "estado": "completada"
                 },
                 "2": {
@@ -72,20 +72,20 @@
             "tareas_proyecto": {}
         },
         "6": {
-            "nombre_proyecto": "Rediseño de Marca",
+            "nombre_proyecto": "Redise\u00c3\u00b1o de Marca",
             "descripcion_proyecto": "Actualizar la imagen de marca de la empresa.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
                     "titulo": "Creacion de Logotipo",
-                    "descripcion": "Diseñar un nuevo logotipo para la empresa.",
+                    "descripcion": "Dise\u00c3\u00b1ar un nuevo logotipo para la empresa.",
                     "estado": "pendiente"
                 }
             }
         },
         "7": {
-            "nombre_proyecto": "Campaña Publicitaria",
-            "descripcion_proyecto": "Lanzar una nueva campaña publicitaria.",
+            "nombre_proyecto": "Campa\u00c3\u00b1a Publicitaria",
+            "descripcion_proyecto": "Lanzar una nueva campa\u00c3\u00b1a publicitaria.",
             "tareas_proyecto": {}
         },
         "8": {
@@ -114,8 +114,8 @@
                 },
                 "2": {
                     "id": 2,
-                    "titulo": "Diseño del Sistema",
-                    "descripcion": "Crear el diseño tecnico y funcional del sistema.",
+                    "titulo": "Dise\u00c3\u00b1o del Sistema",
+                    "descripcion": "Crear el dise\u00c3\u00b1o tecnico y funcional del sistema.",
                     "estado": "pendiente"
                 }
             }

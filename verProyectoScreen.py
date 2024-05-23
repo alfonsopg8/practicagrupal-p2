@@ -5,28 +5,96 @@ import main
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_verProyecto(object):
-    """Clase para definir la interfaz de usuario de la ventana de visualización de proyectos."""
+    """
+        A class to manage the UI of viewing a project in the application.
 
+        Methods
+        -------
+        completadoTarea()
+            Marks a task as completed.
+        encursoTarea()
+            Marks a task as in progress.
+        pendienteTarea()
+            Marks a task as pending.
+        goBack()
+            Navigates back to the main screen.
+        irAdelanteProyecto()
+            Navigates to the next project.
+        irAtrasProyecto()
+            Navigates to the previous project.
+        irAdelanteTarea()
+            Navigates to the next task.
+        irAtrasTarea()
+            Navigates to the previous task.
+        setupUi(verProyecto)
+            Sets up the UI elements for viewing a project.
+        retranslateUi(verProyecto)
+            Translates the UI elements for internationalization.
+        """
     def completadoTarea(self):
-        """Marca la tarea actual como completada."""
+        """
+                Marks a task as completed by changing its status.
+
+                Imports
+                -------
+                from main import Tarea
+                    Tarea: Class that handles task operations.
+
+                Notes
+                -----
+                Calls the cambiar_completada() method on an instance of Tarea.
+                """
         from main import Tarea
         tarea = Tarea()
         tarea.cambiar_completada()
 
     def encursoTarea(self):
-        """Marca la tarea actual como en curso."""
+        """
+                Marks a task as in progress by changing its status.
+
+                Imports
+                -------
+                from main import Tarea
+                    Tarea: Class that handles task operations.
+
+                Notes
+                -----
+                Calls the cambiar_en_curso() method on an instance of Tarea.
+                """
         from main import Tarea
         tarea = Tarea()
         tarea.cambiar_en_curso()
 
     def pendienteTarea(self):
-        """Marca la tarea actual como pendiente."""
+        """
+        Marks a task as pending by changing its status.
+
+        Imports
+        -------
+        from main import Tarea
+            Tarea: Class that handles task operations.
+
+        Notes
+        -----
+        Calls the cambiar_pendiente() method on an instance of Tarea.
+        """
         from main import Tarea
         tarea = Tarea()
         tarea.cambiar_pendiente()
 
     def goBack(self):
-        """Regresa a la pantalla anterior."""
+        """
+        Navigates back to the main screen of the application.
+
+        Imports
+        -------
+        from mainScreen import Ui_mainScreen
+            Ui_mainScreen: Class that handles the UI of the main screen.
+
+        Notes
+        -----
+        Sets up and shows the main screen UI, then closes the current project view.
+        """
         from mainScreen import Ui_mainScreen
         self.main_window = QtWidgets.QMainWindow()
         self.ui_mainScreen = Ui_mainScreen()
@@ -35,7 +103,20 @@ class Ui_verProyecto(object):
         self.ver_proyecto.close()
 
     def irAdelanteProyecto(self):
-        """Muestra el siguiente proyecto."""
+        """
+        Navigates to the next project in the list.
+
+        Imports
+        -------
+        from main import GestorSistema
+            GestorSistema: Class that handles system operations.
+        import main
+            Accesses global variables and methods from the main module.
+
+        Notes
+        -----
+        Updates the project view and task view to the next project, handling the index appropriately.
+        """
         from main import GestorSistema
         import main
         proyecto = GestorSistema()
@@ -57,7 +138,20 @@ class Ui_verProyecto(object):
         self.nueva_ventana.show()
 
     def irAtrasProyecto(self):
-        """Muestra el proyecto anterior."""
+        """
+                Navigates to the previous project in the list.
+
+                Imports
+                -------
+                from main import GestorSistema
+                    GestorSistema: Class that handles system operations.
+                import main
+                    Accesses global variables and methods from the main module.
+
+                Notes
+                -----
+                Updates the project view and task view to the previous project, handling the index appropriately.
+                """
         from main import GestorSistema
         import main
         proyecto = GestorSistema()
@@ -78,7 +172,20 @@ class Ui_verProyecto(object):
         self.nueva_ventana.show()
 
     def irAdelanteTarea(self):
-        """Muestra la siguiente tarea."""
+        """
+                Navigates to the next task in the project.
+
+                Imports
+                -------
+                from main import GestorSistema
+                    GestorSistema: Class that handles system operations.
+                import main
+                    Accesses global variables and methods from the main module.
+
+                Notes
+                -----
+                Updates the task view to the next task, handling the index appropriately.
+                """
         from main import GestorSistema
         import main
         tarea = GestorSistema()
@@ -98,7 +205,20 @@ class Ui_verProyecto(object):
         self.nueva_ventana.show()
 
     def irAtrasTarea(self):
-        """Muestra la tarea anterior."""
+        """
+                Navigates to the previous task in the project.
+
+                Imports
+                -------
+                from main import GestorSistema
+                    GestorSistema: Class that handles system operations.
+                import main
+                    Accesses global variables and methods from the main module.
+
+                Notes
+                -----
+                Updates the task view to the previous task, handling the index appropriately.
+                """
         from main import GestorSistema
         import main
         tarea = GestorSistema()
@@ -119,7 +239,18 @@ class Ui_verProyecto(object):
         self.nueva_ventana.show()
 
     def setupUi(self, verProyecto):
-        """Configura la interfaz de usuario de la ventana de visualización de proyectos."""
+        """
+                Sets up the UI elements for viewing a project.
+
+                Parameters
+                ----------
+                verProyecto : QMainWindow
+                    The main window instance for viewing a project.
+
+                Notes
+                -----
+                Initializes the UI elements and connects the signals to the respective slots.
+                """
         self.ver_proyecto = verProyecto
         verProyecto.setObjectName("verProyecto")
         verProyecto.resize(1145, 853)
@@ -332,6 +463,14 @@ class Ui_verProyecto(object):
         #-----------------------------------------
 
     def retranslateUi(self, verProyecto):
+        """
+                        Traduce y establece el texto de los elementos de la interfaz.
+
+                        Parameters
+                        ----------
+                        verProyecto : QtWidgets.QWidget
+                            El widget que representa la pantalla de visualización de proyecto.
+                        """
         _translate = QtCore.QCoreApplication.translate
         verProyecto.setWindowTitle(_translate("verProyecto", "Form"))
         self.label_7.setText(_translate("verProyecto", "ID:"))

@@ -1,20 +1,49 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 
 
 class Ui_crearProyectoScreen(object):
+    """
+        Clase que representa la interfaz gráfica para la creación de proyectos.
+
+        Methods
+        -------
+        crearProyectofuncion()
+            Añade el proyecto al sistema y muestra la pantalla principal.
+        goBack()
+            Navega de regreso a la pantalla principal.
+        setupUi(crearProyectoScreen)
+            Configura la interfaz gráfica de la pantalla de creación de proyectos.
+        retranslateUi(crearProyectoScreen)
+            Traduce y establece el texto de los elementos de la interfaz.
+        """
     def crearProyectofuncion(self):
+        """
+                Añade un nuevo proyecto al sistema utilizando la información proporcionada por el usuario.
+                Luego, navega a la pantalla principal del sistema.
+                """
         import main
         from main import GestorSistema
         from mainScreen import Ui_mainScreen
-        proyecto = GestorSistema()
-        proyecto.add_proyecto(main.dni,self.nombreProyectoCreado.text(), self.descripcionProyectoCreado.text())
-        self.main_window = QtWidgets.QMainWindow()
-        self.ui_mainScreen = Ui_mainScreen()
-        self.ui_mainScreen.setupUi(self.main_window)
-        self.main_window.show()
-        self.crear_proyecto.close()
+        if len(self.descripcionProyectoCreado.text()) > 80:
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setStyleSheet("QLabel{min-width: 500px;min-height: 100px;}")
+            msg.setText("La descripción del proyecto supera los 80 caracteres")
+            msg.exec_()
+        else:
+            proyecto = GestorSistema()
+            proyecto.add_proyecto(main.dni,self.nombreProyectoCreado.text(), self.descripcionProyectoCreado.text())
+            self.main_window = QtWidgets.QMainWindow()
+            self.ui_mainScreen = Ui_mainScreen()
+            self.ui_mainScreen.setupUi(self.main_window)
+            self.main_window.show()
+            self.crear_proyecto.close()
     def goBack(self):
+        """
+               Navega de regreso a la pantalla principal sin realizar ninguna acción adicional.
+               """
         from mainScreen import Ui_mainScreen
         self.main_window = QtWidgets.QMainWindow()
         self.ui_mainScreen = Ui_mainScreen()
@@ -22,6 +51,14 @@ class Ui_crearProyectoScreen(object):
         self.main_window.show()
         self.crear_proyecto.close()
     def setupUi(self, crearProyectoScreen):
+        """
+                Configura la interfaz gráfica de la pantalla de creación de proyectos.
+
+                Parameters
+                ----------
+                crearProyectoScreen : QtWidgets.QWidget
+                    El widget que representa la pantalla de creación de proyectos.
+                """
         self.crear_proyecto = crearProyectoScreen
         crearProyectoScreen.setObjectName("crearProyectoScreen")
         crearProyectoScreen.resize(1100, 829)
@@ -96,6 +133,14 @@ class Ui_crearProyectoScreen(object):
         #------------------------------------------------------------------------------
 
     def retranslateUi(self, crearProyectoScreen):
+        """
+               Traduce y establece el texto de los elementos de la interfaz.
+
+               Parameters
+               ----------
+               crearProyectoScreen : QtWidgets.QWidget
+                   El widget que representa la pantalla de creación de proyectos.
+               """
         _translate = QtCore.QCoreApplication.translate
         crearProyectoScreen.setWindowTitle(_translate("crearProyectoScreen", "Form"))
         self.goBackButtonCrearProyecto.setText(_translate("crearProyectoScreen", "Go Back"))

@@ -1,22 +1,51 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+from PyQt5.QtWidgets import QMessageBox
 
 
 class Ui_crearTareaScreen(object):
+    """
+       Clase que representa la interfaz gráfica para la creación de tareas en un proyecto.
+
+       Methods
+       -------
+       crearTareafuncion()
+           Añade una nueva tarea al proyecto y muestra la pantalla principal.
+       goBack()
+           Navega de regreso a la pantalla principal.
+       setupUi(crearTareaScreen)
+           Configura la interfaz gráfica de la pantalla de creación de tareas.
+       retranslateUi(crearTareaScreen)
+           Traduce y establece el texto de los elementos de la interfaz.
+       """
     def crearTareafuncion(self):
+        """
+                Añade una nueva tarea al proyecto utilizando la información proporcionada por el usuario.
+                Luego, navega a la pantalla principal del sistema.
+                """
         import main
         from main import Proyecto
         from mainScreen import Ui_mainScreen
-        tarea = Proyecto()
-        tarea.agregar_tarea(main.dni,self.idProyecto.text(),self.nombreTarea.text(), self.descripcionTarea.text())
-        self.main_window = QtWidgets.QMainWindow()
-        self.ui_mainScreen = Ui_mainScreen()
-        self.ui_mainScreen.setupUi(self.main_window)
-        self.main_window.show()
-        self.crear_tarea.close()
+        if len(self.descripcionTarea.text()) > 80:
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setStyleSheet("QLabel{min-width: 500px;min-height: 100px;}")
+            msg.setText("La descripción de la tarea supera los 80 caracteres")
+            msg.exec_()
+        else:
+            tarea = Proyecto()
+            tarea.agregar_tarea(main.dni,self.idProyecto.text(),self.nombreTarea.text(), self.descripcionTarea.text())
+            self.main_window = QtWidgets.QMainWindow()
+            self.ui_mainScreen = Ui_mainScreen()
+            self.ui_mainScreen.setupUi(self.main_window)
+            self.main_window.show()
+            self.crear_tarea.close()
 
 
     def goBack(self):
+        """
+               Navega de regreso a la pantalla principal sin realizar ninguna acción adicional.
+               """
         from mainScreen import Ui_mainScreen
         self.main_window = QtWidgets.QMainWindow()
         self.ui_mainScreen = Ui_mainScreen()
@@ -24,6 +53,14 @@ class Ui_crearTareaScreen(object):
         self.main_window.show()
         self.crear_tarea.close()
     def setupUi(self, crearTareaScreen):
+        """
+                Configura la interfaz gráfica de la pantalla de creación de tareas.
+
+                Parameters
+                ----------
+                crearTareaScreen : QtWidgets.QWidget
+                    El widget que representa la pantalla de creación de tareas.
+                """
         self.crear_tarea = crearTareaScreen
         crearTareaScreen.setObjectName("crearTareaScreen")
         crearTareaScreen.resize(1146, 855)
@@ -110,6 +147,14 @@ class Ui_crearTareaScreen(object):
 
 
     def retranslateUi(self, crearTareaScreen):
+        """
+                Traduce y establece el texto de los elementos de la interfaz.
+
+                Parameters
+                ----------
+                crearTareaScreen : QtWidgets.QWidget
+                    El widget que representa la pantalla de creación de tareas.
+                """
         _translate = QtCore.QCoreApplication.translate
         crearTareaScreen.setWindowTitle(_translate("crearTareaScreen", "Form"))
         self.descripcionTarea.setPlaceholderText(_translate("crearTareaScreen", "Descripcion corta"))

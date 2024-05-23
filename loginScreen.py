@@ -8,9 +8,29 @@ from errores import DniError
 import sqlite3
 
 class Ui_loginScreen(object):
+    """
+    Esta clase define la pantalla de inicio de sesión de la interfaz de usuario (UI) utilizando PyQt.
 
-    #-----------------My functions-----------------
+    Métodos
+    -------
+    register()
+        Abre la ventana de registro y cierra la ventana de inicio de sesión actual.
+    sendBotonLogin()
+        Maneja el proceso de inicio de sesión, verifica las credenciales del usuario y,
+        en caso de éxito, navega a la pantalla principal.
+    goMainScreen()
+        Navega a la pantalla principal de la aplicación.
+    setupUi(LoginWindow)
+        Configura la interfaz de usuario de la ventana de inicio de sesión.
+    retranslateUi(LoginWindow)
+        Traduce el texto de la interfaz de usuario al idioma correspondiente.
+    """
+
+    #-----------------Mis funciones-----------------
     def register(self):
+        """
+        Abre una nueva ventana para el registro de usuarios y cierra la ventana de inicio de sesión actual.
+        """
         self.register_window = QtWidgets.QMainWindow()
         self.ui_register = Ui_registerScreen()
         self.ui_register.setupUi(self.register_window)
@@ -18,6 +38,13 @@ class Ui_loginScreen(object):
         self.loginWindow.close()
 
     def sendBotonLogin(self):
+        """
+        Maneja el proceso de inicio de sesión del usuario.
+
+        Importa las clases necesarias, verifica las credenciales del usuario mediante una consulta a la base de datos,
+        y maneja los posibles errores de inicio de sesión. Si las credenciales son válidas, navega a la pantalla principal;
+        de lo contrario, muestra un mensaje de error.
+        """
         from mainScreen import Ui_mainScreen
         from main import UsuarioBase
         usuariodb = UsuarioBase()
@@ -50,6 +77,11 @@ class Ui_loginScreen(object):
             usuariodb.conn.close()
 
     def goMainScreen(self):
+        """
+        Navega a la pantalla principal de la aplicación.
+
+        Crea una nueva ventana principal y configura su interfaz de usuario, luego cierra la ventana de inicio de sesión actual.
+        """
         from mainScreen import Ui_mainScreen
         self.mainScreen = QtWidgets.QMainWindow()
         self.ui_main = Ui_mainScreen()
@@ -61,6 +93,12 @@ class Ui_loginScreen(object):
 
     #----------------------------------------------
     def setupUi(self, LoginWindow):
+        """
+        Configura la interfaz de usuario de la ventana de inicio de sesión.
+
+        Define todos los widgets y sus propiedades, incluyendo las etiquetas, campos de texto, y botones.
+        También conecta los botones de inicio de sesión y registro a sus respectivas funciones.
+        """
         self.loginWindow = LoginWindow
         LoginWindow.setObjectName("loginScreen")
         LoginWindow.resize(900, 800)
@@ -170,11 +208,15 @@ class Ui_loginScreen(object):
         # -----------------My Code-----------------
         self.registerButtonLogin.clicked.connect(self.register)
         self.loginButton.clicked.connect(self.sendBotonLogin)
-        #self.loginButton.clicked.connect(self.goMainScreen)
         # ------------------------------------------
 
 
     def retranslateUi(self, LoginWindow):
+        """
+        Traduce los textos de la interfaz de usuario.
+
+        Configura los textos mostrados en los diferentes widgets de la ventana de inicio de sesión.
+        """
         _translate = QtCore.QCoreApplication.translate
         LoginWindow.setWindowTitle(_translate("LoginWindow", "LoginWindow"))
         self.label_3.setText(_translate("LoginWindow", "Log In"))
@@ -182,6 +224,8 @@ class Ui_loginScreen(object):
         self.contrasenaLogin.setPlaceholderText(_translate("LoginWindow", "Contraseña"))
         self.loginButton.setText(_translate("LoginWindow", "Log In"))
         self.registerButtonLogin.setText(_translate("LoginWindow", "Register"))
+
+help(Ui_loginScreen())
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

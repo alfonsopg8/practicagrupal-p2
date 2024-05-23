@@ -178,6 +178,19 @@ class UsuarioBase:
         return verificacion
 
     def validar_dni(self, dni):
+        '''
+                Valida el formato del DNI.
+
+                Parameters
+                ----------
+                dni : str
+                    DNI a validar.
+
+                Returns
+                -------
+                bool
+                    True si el DNI es válido, False en caso contrario.
+                '''
         global dniok
         # Expresion regular para validar dni
         valido = r'[0-9]{8}[A-Z]'
@@ -193,6 +206,19 @@ class UsuarioBase:
         return dni_validado
 
     def validar_nombre(self, nombre):
+        '''
+                Valida el formato del nombre.
+
+                Parameters
+                ----------
+                nombre : str
+                    Nombre a validar.
+
+                Returns
+                -------
+                bool
+                    True si el nombre es válido, False en caso contrario.
+                '''
         global nombreok
         try:
             if not nombre.isalpha():
@@ -206,6 +232,19 @@ class UsuarioBase:
         return nombre_validado
 
     def validar_apellidos(self, apellido):
+        '''
+                Valida el formato del apellido.
+
+                Parameters
+                ----------
+                apellido : str
+                    Apellido a validar.
+
+                Returns
+                -------
+                bool
+                    True si el apellido es válido, False en caso contrario.
+                '''
         global apellidook
         try:
             if not apellido.isalpha():
@@ -219,6 +258,19 @@ class UsuarioBase:
         return apellido_validado
 
     def validar_correo(self, correo):
+        '''
+                Valida el formato del correo electrónico.
+
+                Parameters
+                ----------
+                correo : str
+                    Correo electrónico a validar.
+
+                Returns
+                -------
+                bool
+                    True si el correo es válido, False en caso contrario.
+                '''
         global correook
         valido = r'[a-zA-Z0-9._]+@[a-z]+\.[a-zA-Z]{2,}'
         try:
@@ -233,6 +285,22 @@ class UsuarioBase:
         return correo_validado
 
     def crear_usuario(self, dni, contrasena, nombre, apellido, correo):
+        '''
+                Crea un nuevo usuario en la base de datos.
+
+                Parameters
+                ----------
+                dni : str
+                    DNI del usuario.
+                contrasena : str
+                    Contraseña del usuario.
+                nombre : str
+                    Nombre del usuario.
+                apellido : str
+                    Apellido del usuario.
+                correo : str
+                    Correo electrónico del usuario.
+                '''
         global goLogin
         dni_validado = self.validar_dni(dni)
         nombre_validado = self.validar_nombre(nombre)
@@ -251,6 +319,20 @@ class UsuarioBase:
             goLogin = False
 
     def editar_usuario(self, dni, nombre, apellido, correo):
+        '''
+                Edita la información de un usuario existente.
+
+                Parameters
+                ----------
+                dni : str
+                    DNI del usuario.
+                nombre : str
+                    Nuevo nombre del usuario.
+                apellido : str
+                    Nuevo apellido del usuario.
+                correo : str
+                    Nuevo correo electrónico del usuario.
+                '''
         nombre_validado = self.validar_nombre(nombre)
         apellido_validado = self.validar_apellidos(apellido)
         correo_validado = self.validar_correo(correo)
@@ -264,10 +346,33 @@ class UsuarioBase:
             self.conn.commit()
 
     def eliminar_usuario(self, dni):
+        '''
+                Elimina un usuario de la base de datos.
+
+                Parameters
+                ----------
+                dni : str
+                    DNI del usuario a eliminar.
+                '''
         self.cursor.execute('DELETE FROM usuarios WHERE dni = ?', (dni,))
         self.conn.commit()
 
     def login_usuario(self, dni, contrasena):
+        '''
+                Inicia sesión con las credenciales proporcionadas.
+
+                Parameters
+                ----------
+                dni : str
+                    DNI del usuario.
+                contrasena : str
+                    Contraseña del usuario.
+
+                Returns
+                -------
+                bool
+                    True si el inicio de sesión es exitoso, False en caso contrario.
+                '''
         global contrasenyaok
         self.cursor.execute('SELECT * FROM usuarios WHERE dni = ?', (dni,))
         usuario = self.cursor.fetchone()
@@ -290,8 +395,6 @@ class UsuarioBase:
             self.cursor.close()
             self.conn.close()
 
-usuariodb = UsuarioBase()
-usuariodb.eliminar_usuario('12345678Z')
 #------------Proyecto-----------
 # Clase que nos permite gestionar los proyectos del sistema
 class GestorSistema:
@@ -335,6 +438,19 @@ class GestorSistema:
             self.proyectos = {}
 
     def validar_descripcion(self, descripcion_proyecto):
+        '''
+                Valida la descripción del proyecto.
+
+                Parámetros
+                ----------
+                descripcion_proyecto : str
+                    Descripción del proyecto a validar.
+
+                Devuelve
+                -------
+                bool
+                    True si la descripción es válida, False en caso contrario.
+                '''
         # Probamos a ver si la descripción es válida
         try:
             # Si la descripción contiene más de 80 caracteres
@@ -352,6 +468,18 @@ class GestorSistema:
 
     # Método que crea proyectos y los almacena
     def add_proyecto(self,dni,nombre_proyecto,descripcion_proyecto):
+        '''
+                Añade un proyecto a un usuario.
+
+                Parámetros
+                ----------
+                dni : str
+                    DNI del usuario.
+                nombre_proyecto : str
+                    Nombre del proyecto.
+                descripcion_proyecto : str
+                    Descripción del proyecto.
+                '''
         descripcion_validada=self.validar_descripcion(descripcion_proyecto)
 
         if descripcion_validada:
@@ -390,6 +518,14 @@ class GestorSistema:
 
     # Método que permite ver los proyectos
     def ver_proyecto(self, dni):
+        '''
+                Muestra la información de un proyecto específico de un usuario.
+
+                Parámetros
+                ----------
+                dni : str
+                    DNI del usuario.
+                '''
         global boton_proyecto
         global idproyecto
         global nombre_proyecto
@@ -409,6 +545,14 @@ class GestorSistema:
 
 
     def ver_tareas(self,dni):
+        '''
+                Muestra la información de las tareas de un proyecto específico de un usuario.
+
+                Parámetros
+                ----------
+                dni : str
+                    DNI del usuario.
+                '''
         global boton_tareas
         global boton_proyecto
         global idtarea
@@ -443,6 +587,7 @@ class Tarea:
         cambiar_completada: Cambia el estado de una tarea a "completada".
     '''
     def cambiar_pendiente(self):
+        ''' Cambia el estado de una tarea a "pendiente". '''
         global idtarea
         global idproyecto
         global dni
@@ -460,6 +605,7 @@ class Tarea:
             json.dump(proyectos, json_file, indent=4)
 
     def cambiar_en_curso(self):
+        ''' Cambia el estado de una tarea a "en curso". '''
         global idtarea
         global idproyecto
         global dni
@@ -473,10 +619,12 @@ class Tarea:
 
         # Abrimos el archivo json en modo escritura
         with open('proyectos.json', 'w') as json_file:
+
             # Guardamos en él, el diccionario proyectos actualizado
             json.dump(proyectos, json_file, indent=4)
 
     def cambiar_completada(self):
+        ''' Cambia el estado de una tarea a "completada". '''
         global idtarea
         global idproyecto
         global dni
@@ -508,6 +656,19 @@ class Proyecto:
     agregar_tarea: Encargado de agregar tareas al proyecto deseado almacenándolas en un archivo json.
     '''
     def verificar_titulo(self, titulo):
+        '''
+                Verifica si el título de una tarea es válido.
+
+                Parámetros
+                ----------
+                titulo : str
+                    Título de la tarea a verificar.
+
+                Devuelve
+                -------
+                bool
+                    True si el título es válido, False en caso contrario.
+                '''
         # Probamos a escribir el título
         try:
             if not titulo:
@@ -523,6 +684,19 @@ class Proyecto:
         return titulo_verificado
 
     def verificar_descripcion(self, descripcion):
+        '''
+                Verifica si la descripción de una tarea es válida.
+
+                Parámetros
+                ----------
+                descripción : str
+                    Descripción de la tarea a verificar.
+
+                Devuelve
+                -------
+                bool
+                    True si la descripción es válida, False en caso contrario.
+                '''
         try:
             if len(descripcion) > 80:
                 # Se lanza el error DescripcionError
@@ -538,6 +712,20 @@ class Proyecto:
 
     # Método encargado de añadir tareas al proyecto
     def agregar_tarea(self, dni, id_proyecto, nombre, descripcion):
+        '''
+                Agrega una tarea a un proyecto.
+
+                Parámetros
+                ----------
+                dni : str
+                    DNI del usuario.
+                id_proyecto : int
+                    ID del proyecto al que se añadirá la tarea.
+                nombre : str
+                    Nombre de la tarea.
+                descripcion : str
+                    Descripción de la tarea.
+                '''
         try:
             with open('proyectos.json', 'r') as json_file:
                 # Cargamos el diccionario desde el archivo JSON
@@ -587,3 +775,5 @@ class Proyecto:
                 print(f"Error inesperado al escribir el archivo: {e}")
         else:
             print("Nombre o descripción no válidos")
+
+help(UsuarioBase())
