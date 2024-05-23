@@ -1,16 +1,22 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from PyQt5.QtWidgets import QMessageBox
-
 import main
-from main import registerInfo, botonRegistro
+from main import botonRegistro
+from errores import UsuarioError
 
 
 
 class Ui_registerScreen(object):
-        #-----------------My functions------------------
+    """
+    Clase para la pantalla de registro en una aplicación PyQt5.
+    """
+
+    #-----------------Mis funciones------------------
     def sendInfo(self):
-        registerInfo(self,self.nombreUsuarioRegister.text(),self.apellidoUsuarioRegister.text(),self.dniRegister.text(),self.correoRegister.text(),self.passwordRegister.text(),self.registerWindow)
+        """
+        Guarda la información de registro en las variables del módulo principal.
+        """
         main.name = self.nombreUsuarioRegister.text()
         main.surname = self.apellidoUsuarioRegister.text()
         main.dni = self.dniRegister.text()
@@ -18,32 +24,71 @@ class Ui_registerScreen(object):
         main.password = self.passwordRegister.text()
 
     def sendBotonRegistro(self):
-        botonRegistro(self,self.nombreUsuarioRegister.text(),self.apellidoUsuarioRegister.text(),self.dniRegister.text(),self.correoRegister.text(),self.passwordRegister.text(),self.registerWindow)
-
+        """
+        Llama a la función botonRegistro del módulo main con los datos de registro.
+        """
+        botonRegistro(self, self.nombreUsuarioRegister.text(), self.apellidoUsuarioRegister.text(),
+                      self.dniRegister.text(), self.correoRegister.text(), self.passwordRegister.text(),
+                      self.registerWindow)
 
     def goLogin(self):
+        """
+        Verifica la existencia del usuario en la base de datos antes de registrar.
+
+        Si el usuario ya existe, muestra un mensaje de error.
+        """
         from loginScreen import Ui_loginScreen
         import main
-        if main.goLogin:
-            self.login_window = QtWidgets.QMainWindow()
-            self.ui_register = Ui_loginScreen()
-            self.ui_register.setupUi(self.login_window)
-            self.login_window.show()
-            self.registerWindow.close()
+        from main import UsuarioBase
+        usuariodb = UsuarioBase()
+        try:
+            # Ejecuta la consulta para verificar si el usuario ya existe en la base de datos
+            usuariodb.cursor.execute('SELECT * FROM usuarios WHERE dni = ?', (self.dniRegister.text(),))
+            usuario = usuariodb.cursor.fetchone()
+            if usuario:
+                raise UsuarioError(self.dniRegister.text())
+        except UsuarioError as ex:
+            # Maneja la excepción si el usuario ya existe
+            print(ex)
+            self.ventana_error()
         else:
-            print("Corrige")
+            # Registra el usuario si no existe y muestra la pantalla de inicio de sesión
+            self.sendBotonRegistro()
+            if main.goLogin:
+                self.login_window = QtWidgets.QMainWindow()
+                self.ui_register = Ui_loginScreen()
+                self.ui_register.setupUi(self.login_window)
+                self.login_window.show()
+                self.registerWindow.close()
+            else:
+                self.ventana_error()
+        finally:
+            # Cierra el cursor y la conexión a la base de datos
+            usuariodb.cursor.close()
+            usuariodb.conn.close()
 
     def ventana_error(self):
+        """
+        Muestra un mensaje de error si las credenciales son inválidas.
+        """
         import main
         if not main.goLogin:
             msg = QMessageBox()
             msg.setWindowTitle("Error")
             msg.setStyleSheet("QLabel{min-width: 500px;min-height: 100px;}")
-            msg.setText("Credenciales invalidos, reviselos")
+            msg.setText("Credenciales inválidas, revíselas")
             x = msg.exec_()
 
     #-----------------------------------------------
     def setupUi(self, RegisterWindow):
+        """
+               Configura la interfaz de usuario de la pantalla de registro.
+
+               Parameters
+               ----------
+               RegisterWindow : QMainWindow
+                   La ventana principal para configurar la UI.
+        """
         self.registerWindow = RegisterWindow
         RegisterWindow.setObjectName("RegisterWindow")
         RegisterWindow.resize(1063, 825)
@@ -167,16 +212,24 @@ class Ui_registerScreen(object):
         self.retranslateUi(RegisterWindow)
         QtCore.QMetaObject.connectSlotsByName(RegisterWindow)
         # -----------------My Code-----------------
+        # Conecta la señal "clicked" del botón de registro a la función sendInfo.
         self.registerButton.clicked.connect(self.sendInfo)
-        self.registerButton.clicked.connect(self.sendBotonRegistro)
+        # Conecta la señal "clicked" del botón de registro a la función goLogin.
         self.registerButton.clicked.connect(self.goLogin)
-        self.registerButton.clicked.connect(self.ventana_error)
 
 
         # ------------------------------------------
 
 
     def retranslateUi(self, RegisterWindow):
+        """
+           Traduce y establece el texto de los elementos de la interfaz de usuario.
+
+           Parameters
+           ----------
+           RegisterWindow : QMainWindow
+               La ventana principal para configurar la UI.
+           """
         _translate = QtCore.QCoreApplication.translate
         RegisterWindow.setWindowTitle(_translate("RegisterWindow", "MainWindow"))
         self.label_3.setText(_translate("RegisterWindow", "Register"))

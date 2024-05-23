@@ -51,3 +51,15 @@ class ProyectoNoEncontradoError(Exception):
         super().__init__(*args,**kwargs)
     def __str__(self):
         return 'El proyecto no existe'
+
+class ContrasenaLoginError(Exception):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+    def __str__(self):
+        return 'La contrasena es incorrecta'
+
+class UsuarioError(Exception):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+    def __str__(self):
+        return 'Usuario no registrado'

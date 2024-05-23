@@ -1,35 +1,43 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import json
 import main
 
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_verProyecto(object):
+    """Clase para definir la interfaz de usuario de la ventana de visualización de proyectos."""
+
     def completadoTarea(self):
+        """Marca la tarea actual como completada."""
         from main import Tarea
         tarea = Tarea()
         tarea.cambiar_completada()
 
     def encursoTarea(self):
+        """Marca la tarea actual como en curso."""
         from main import Tarea
         tarea = Tarea()
         tarea.cambiar_en_curso()
 
     def pendienteTarea(self):
+        """Marca la tarea actual como pendiente."""
         from main import Tarea
         tarea = Tarea()
         tarea.cambiar_pendiente()
+
     def goBack(self):
+        """Regresa a la pantalla anterior."""
         from mainScreen import Ui_mainScreen
         self.main_window = QtWidgets.QMainWindow()
         self.ui_mainScreen = Ui_mainScreen()
         self.ui_mainScreen.setupUi(self.main_window)
         self.main_window.show()
         self.ver_proyecto.close()
+
     def irAdelanteProyecto(self):
+        """Muestra el siguiente proyecto."""
         from main import GestorSistema
         import main
-        print(main.boton_proyecto)
         proyecto = GestorSistema()
         main.boton_tareas = 0
         with open('proyectos.json', 'r') as json_file:
@@ -41,7 +49,6 @@ class Ui_verProyecto(object):
         main.boton_proyecto += 1
         proyecto.ver_proyecto(main.dni)
         proyecto.ver_tareas(main.dni)
-        print(f"botonProyecto= {main.boton_proyecto}")
         self.ver_proyecto.close()
         # Crear una nueva instancia de la ventana
         self.nueva_ventana = QtWidgets.QMainWindow()
@@ -50,6 +57,7 @@ class Ui_verProyecto(object):
         self.nueva_ventana.show()
 
     def irAtrasProyecto(self):
+        """Muestra el proyecto anterior."""
         from main import GestorSistema
         import main
         proyecto = GestorSistema()
@@ -60,10 +68,6 @@ class Ui_verProyecto(object):
             main.boton_proyecto=len(proyectos[main.dni])+1
         main.boton_proyecto -= 1
         proyecto.ver_proyecto(main.dni)
-        #with open('proyectos.json', 'r') as json_file:
-            # Cargamos el diccionario desde el archivo JSON
-            #proyectos = json.load(json_file)
-        #if proyectos[main.dni][str(main.idproyecto)]['tareas_proyecto'] != {}:
         proyecto.ver_tareas(main.dni)
         self.ver_proyecto.close()
         main.boton_tareas=0
@@ -74,6 +78,7 @@ class Ui_verProyecto(object):
         self.nueva_ventana.show()
 
     def irAdelanteTarea(self):
+        """Muestra la siguiente tarea."""
         from main import GestorSistema
         import main
         tarea = GestorSistema()
@@ -91,7 +96,9 @@ class Ui_verProyecto(object):
         self.nuevo_ui = Ui_verProyecto()
         self.nuevo_ui.setupUi(self.nueva_ventana)
         self.nueva_ventana.show()
+
     def irAtrasTarea(self):
+        """Muestra la tarea anterior."""
         from main import GestorSistema
         import main
         tarea = GestorSistema()
@@ -104,14 +111,15 @@ class Ui_verProyecto(object):
         main.boton_tareas -= 1
         tarea.ver_proyecto(main.dni)
         tarea.ver_tareas(main.dni)
-        print(f"botonTareas= {main.boton_tareas}")
         self.ver_proyecto.close()
         # Crear una nueva instancia de la ventana
         self.nueva_ventana = QtWidgets.QMainWindow()
         self.nuevo_ui = Ui_verProyecto()
         self.nuevo_ui.setupUi(self.nueva_ventana)
         self.nueva_ventana.show()
+
     def setupUi(self, verProyecto):
+        """Configura la interfaz de usuario de la ventana de visualización de proyectos."""
         self.ver_proyecto = verProyecto
         verProyecto.setObjectName("verProyecto")
         verProyecto.resize(1145, 853)
@@ -352,4 +360,3 @@ if __name__ == "__main__":
     ver_proyecto = QtWidgets.QMainWindow()
     ui.setupUi(ver_proyecto)
     ver_proyecto.show()
-    sys.exit(app.exec_())

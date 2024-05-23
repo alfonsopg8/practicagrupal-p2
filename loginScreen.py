@@ -8,6 +8,7 @@ from errores import DniError
 import sqlite3
 
 class Ui_loginScreen(object):
+
     #-----------------My functions-----------------
     def register(self):
         self.register_window = QtWidgets.QMainWindow()
@@ -33,11 +34,20 @@ class Ui_loginScreen(object):
             msg.setText("Credenciales invalidas o Usuario inexistente")
             msg.exec_()  # Correct use of exec_() to show the message box
         else:
-            print('else')
             main.botonLogin(self, self.dniLogin.text(), self.contrasenaLogin.text(), self.loginWindow)
             main.dniLogin = self.dniLogin.text()
             main.getInfo()
-            self.goMainScreen()
+            if main.contrasenyaok:
+                self.goMainScreen()
+            else:
+                self.loginWindow.close()
+                self.login_window = QtWidgets.QMainWindow()
+                self.ui_register = Ui_loginScreen()
+                self.ui_register.setupUi(self.login_window)
+                self.login_window.show()
+        finally:
+            usuariodb.cursor.close()
+            usuariodb.conn.close()
 
     def goMainScreen(self):
         from mainScreen import Ui_mainScreen

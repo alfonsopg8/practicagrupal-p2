@@ -1,111 +1,151 @@
 {
     "12345678A": {
         "1": {
-            "nombre_proyecto": "a",
-            "descripcion_proyecto": "a",
+            "nombre_proyecto": "Desarrollo de Aplicacion Movil",
+            "descripcion_proyecto": "Crear una aplicacion movil para gestion de tareas.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "Tarea 1",
-                    "descripcion": "Tarea de prueba",
-                    "estado": "en curso"
+                    "titulo": "Diseño de UI/UX",
+                    "descripcion": "Crear el diseño de interfaz y experiencia de usuario.",
+                    "estado": "completada"
                 },
                 "2": {
                     "id": 2,
-                    "titulo": "tarea2",
-                    "descripcion": "mi padre me la pela",
+                    "titulo": "Implementacion de Backend",
+                    "descripcion": "Desarrollar la logica del servidor y base de datos.",
                     "estado": "completada"
                 },
                 "3": {
                     "id": 3,
-                    "titulo": "hacer deberes",
-                    "descripcion": "deberes de mate y fisica",
+                    "titulo": "Desarrollo de Funcionalidades",
+                    "descripcion": "Programar las funciones principales de la aplicacion.",
+                    "estado": "pendiente"
+                },
+                "4": {
+                    "id": 4,
+                    "titulo": "Pruebas de Usuario",
+                    "descripcion": "Realizar pruebas con usuarios para asegurar calidad.",
                     "estado": "pendiente"
                 }
             }
         },
         "2": {
-            "nombre_proyecto": "p",
-            "descripcion_proyecto": "a",
+            "nombre_proyecto": "Sitio Web Corporativo",
+            "descripcion_proyecto": "Desarrollar un nuevo sitio web para la empresa.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "ppp",
-                    "descripcion": "taron me la chupa",
+                    "titulo": "Recoleccion de Requisitos",
+                    "descripcion": "Reunir los requisitos del sitio web con el cliente.",
                     "estado": "pendiente"
                 }
             }
         },
         "3": {
-            "nombre_proyecto": "paulino",
-            "descripcion_proyecto": "a las 12 paja",
+            "nombre_proyecto": "Automatizacion de Marketing",
+            "descripcion_proyecto": "Implementar herramientas de automatizacion de marketing.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "ppp",
-                    "descripcion": "taron me la chupa",
+                    "titulo": "Investigacion de Herramientas",
+                    "descripcion": "Investigar las mejores herramientas de automatizacion.",
                     "estado": "pendiente"
                 }
             }
         },
         "4": {
-            "nombre_proyecto": "filo da puta",
-            "descripcion_proyecto": "no entiendo",
+            "nombre_proyecto": "Optimizacion SEO",
+            "descripcion_proyecto": "Mejorar el posicionamiento en buscadores del sitio web.",
+            "tareas_proyecto": {
+                "1": {
+                    "id": 1,
+                    "titulo": "Analisis de Palabras Clave",
+                    "descripcion": "Investigar y seleccionar palabras clave relevantes.",
+                    "estado": "pendiente"
+                }
+            }
+        },
+        "5": {
+            "nombre_proyecto": "E-commerce",
+            "descripcion_proyecto": "Desarrollar una tienda en linea para la empresa.",
+            "tareas_proyecto": {}
+        },
+        "6": {
+            "nombre_proyecto": "Rediseño de Marca",
+            "descripcion_proyecto": "Actualizar la imagen de marca de la empresa.",
+            "tareas_proyecto": {
+                "1": {
+                    "id": 1,
+                    "titulo": "Creacion de Logotipo",
+                    "descripcion": "Diseñar un nuevo logotipo para la empresa.",
+                    "estado": "pendiente"
+                }
+            }
+        },
+        "7": {
+            "nombre_proyecto": "Campaña Publicitaria",
+            "descripcion_proyecto": "Lanzar una nueva campaña publicitaria.",
+            "tareas_proyecto": {}
+        },
+        "8": {
+            "nombre_proyecto": "Evento Corporativo",
+            "descripcion_proyecto": "Organizar un evento corporativo para clientes.",
             "tareas_proyecto": {}
         }
     },
-    "12345678M": {
+    "12345678W": {
         "1": {
-            "nombre_proyecto": "ee",
-            "descripcion_proyecto": "eeee",
+            "nombre_proyecto": "Expansion Internacional",
+            "descripcion_proyecto": "Planificar la expansion de la empresa a nuevos mercados.",
             "tareas_proyecto": {}
         }
     },
     "87654321L": {
         "1": {
-            "nombre_proyecto": "Sistema de Gestión de Inventarios",
+            "nombre_proyecto": "Sistema de Gestion de Inventarios",
             "descripcion_proyecto": "Desarrollar un sistema para gestionar inventarios de manera eficiente.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "Análisis de Requisitos",
+                    "titulo": "Analisis de Requisitos",
                     "descripcion": "Reunir y documentar los requisitos del sistema.",
                     "estado": "en curso"
                 },
                 "2": {
                     "id": 2,
                     "titulo": "Diseño del Sistema",
-                    "descripcion": "Crear el diseño técnico y funcional del sistema.",
+                    "descripcion": "Crear el diseño tecnico y funcional del sistema.",
                     "estado": "pendiente"
                 }
             }
         },
         "2": {
-            "nombre_proyecto": "Integración de Pagos en Línea",
-            "descripcion_proyecto": "Implementar una solución de pagos en línea en el sitio web.",
+            "nombre_proyecto": "Integracion de Pagos en Linea",
+            "descripcion_proyecto": "Implementar una solucion de pagos en linea en el sitio web.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "Selección de Proveedor",
+                    "titulo": "Seleccion de Proveedor",
                     "descripcion": "Evaluar y seleccionar el proveedor de servicios de pago.",
                     "estado": "completada"
                 },
                 "2": {
                     "id": 2,
-                    "titulo": "Implementación de API",
+                    "titulo": "Implementacion de API",
                     "descripcion": "Integrar la API del proveedor seleccionado en el sitio web.",
                     "estado": "en curso"
                 }
             }
         },
         "3": {
-            "nombre_proyecto": "Capacitación Interna",
-            "descripcion_proyecto": "Programa de capacitación para mejorar las habilidades del personal.",
+            "nombre_proyecto": "Capacitacion Interna",
+            "descripcion_proyecto": "Programa de capacitacion para mejorar las habilidades del personal.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
                     "titulo": "Desarrollo del Material",
-                    "descripcion": "Crear materiales y recursos para la capacitación.",
+                    "descripcion": "Crear materiales y recursos para la capacitacion.",
                     "estado": "completada"
                 },
                 "2": {
@@ -117,18 +157,18 @@
             }
         },
         "4": {
-            "nombre_proyecto": "Auditoría de Seguridad",
-            "descripcion_proyecto": "Realizar una auditoría de seguridad de la infraestructura de TI.",
+            "nombre_proyecto": "Auditoria de Seguridad",
+            "descripcion_proyecto": "Realizar una auditoria de seguridad de la infraestructura de TI.",
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "Evaluación de Vulnerabilidades",
+                    "titulo": "Evaluacion de Vulnerabilidades",
                     "descripcion": "Identificar y documentar las vulnerabilidades de seguridad.",
                     "estado": "completada"
                 },
                 "2": {
                     "id": 2,
-                    "titulo": "Implementación de Medidas",
+                    "titulo": "Implementacion de Medidas",
                     "descripcion": "Implementar medidas para mitigar las vulnerabilidades identificadas.",
                     "estado": "en curso"
                 }
@@ -140,13 +180,13 @@
             "tareas_proyecto": {
                 "1": {
                     "id": 1,
-                    "titulo": "Evaluación de la Red Actual",
+                    "titulo": "Evaluacion de la Red Actual",
                     "descripcion": "Analizar el estado actual de la red y sus necesidades.",
                     "estado": "completada"
                 },
                 "2": {
                     "id": 2,
-                    "titulo": "Implementación de Mejoras",
+                    "titulo": "Implementacion de Mejoras",
                     "descripcion": "Actualizar el hardware y software de la red.",
                     "estado": "en curso"
                 }
